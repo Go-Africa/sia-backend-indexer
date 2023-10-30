@@ -1,29 +1,14 @@
-version: '3.3'
+version: '3.8'
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - .:/cashApp
-  #   depends_on:
-  #     - db
-  db:
-    image: mysql:latest
-    volumes:
-      - .db_data:/var/lib/mysql
+  postgres:
+    image: postgres:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: crm_db
-      MYSQL_USER: toor
-      MYSQL_PASSWORD: root
-      MYSQL_MAX_CONNECTIONS: 5
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=toor
+    volumes:
+      - postgres:/var/lib/postgresql/data
     ports:
-      - 3306:3306
-
-
-     
-
+      - '5432:5432'
+volumes:
+  postgres:
