@@ -1,10 +1,13 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Inject } from '@nestjs/common';
 import { log } from 'console';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements NestInterceptor {
-  constructor(private username: string, private password: string) {}
+  constructor(
+    @Inject('USERNAME') private username: string,
+    @Inject('PASSWORD') private password: string,
+  ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     // Get the request object
@@ -15,7 +18,8 @@ export class AuthInterceptor implements NestInterceptor {
     
     // Add the Basic authorization header to the request object
     request.headers['Authorization'] = `Basic ${base64Credentials}`;
-    log("headers requests", request.headers)
+    request.headers['User-Agent'] = 'Sia-Agent';
+    log("headers requests", request.headers);
 
     return next.handle();
   }
