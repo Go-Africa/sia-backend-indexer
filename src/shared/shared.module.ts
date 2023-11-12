@@ -6,6 +6,7 @@ import { InterceptorModule } from './interceptors/interceptor.module';
   imports: [
     DatabaseModule,
     InterceptorModule
-  ]
+  ],
+  exports: [DatabaseModule]
 })
 export class SharedModule {}

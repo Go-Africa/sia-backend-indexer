@@ -27,6 +27,12 @@ DatabaseModule = __decorate([
                 }),
                 inject: [config_1.ConfigService],
             }),
+            mongoose_1.MongooseModule.forFeature([{ name: block_shema_1.Block.name, schema: block_shema_1.BlockSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: miner_payout_schema_1.MinerPayout.name, schema: miner_payout_schema_1.MinerPayoutSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: transaction_shema_1.Transaction.name, schema: transaction_shema_1.TransactionSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: transaction_signature_schema_1.TransactionSignature.name, schema: transaction_signature_schema_1.TransactionSignatureSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: siacoinoutput_shema_1.SiacoinOutput.name, schema: siacoinoutput_shema_1.SiacoinOutputSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: coveredfields_schema_1.CoveredField.name, schema: coveredfields_schema_1.CoveredFieldSchema }]),
         ],
         exports: [
             mongoose_1.MongooseModule.forFeature([{ name: block_shema_1.Block.name, schema: block_shema_1.BlockSchema }]),

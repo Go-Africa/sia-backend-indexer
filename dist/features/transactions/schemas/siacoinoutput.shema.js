@@ -13,6 +13,12 @@ exports.SiacoinOutputSchema = exports.SiacoinOutput = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
 let SiacoinOutput = class SiacoinOutput extends abstract_schema_1.AbstractDocument {
+    constructor(dto) {
+        super();
+        if (dto) {
+            Object.assign(this, dto);
+        }
+    }
 };
 __decorate([
     (0, mongoose_1.Prop)(),
@@ -27,7 +33,8 @@ __decorate([
     __metadata("design:type", String)
 ], SiacoinOutput.prototype, "unlockhash", void 0);
 SiacoinOutput = __decorate([
-    (0, mongoose_1.Schema)({ versionKey: false })
+    (0, mongoose_1.Schema)({ versionKey: false }),
+    __metadata("design:paramtypes", [SiacoinOutput])
 ], SiacoinOutput);
 exports.SiacoinOutput = SiacoinOutput;
 exports.SiacoinOutputSchema = mongoose_1.SchemaFactory.createForClass(SiacoinOutput);

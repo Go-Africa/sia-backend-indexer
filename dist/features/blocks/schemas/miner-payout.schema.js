@@ -12,7 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MinerPayoutSchema = exports.MinerPayout = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
+const miner_payout_dto_1 = require("../dtos/miner-payout.dto");
 let MinerPayout = class MinerPayout extends abstract_schema_1.AbstractDocument {
+    constructor(dto) {
+        super();
+        if (dto) {
+            Object.assign(this, dto);
+        }
+    }
 };
 __decorate([
     (0, mongoose_1.Prop)(),
@@ -23,7 +30,8 @@ __decorate([
     __metadata("design:type", String)
 ], MinerPayout.prototype, "unlockhash", void 0);
 MinerPayout = __decorate([
-    (0, mongoose_1.Schema)({ versionKey: false })
+    (0, mongoose_1.Schema)({ versionKey: false }),
+    __metadata("design:paramtypes", [miner_payout_dto_1.MinerPayoutDTO])
 ], MinerPayout);
 exports.MinerPayout = MinerPayout;
 exports.MinerPayoutSchema = mongoose_1.SchemaFactory.createForClass(MinerPayout);

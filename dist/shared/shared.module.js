@@ -17,7 +17,8 @@ SharedModule = __decorate([
         imports: [
             database_module_1.DatabaseModule,
             interceptor_module_1.InterceptorModule
-        ]
+        ],
+        exports: [database_module_1.DatabaseModule]
     })
 ], SharedModule);
 exports.SharedModule = SharedModule;

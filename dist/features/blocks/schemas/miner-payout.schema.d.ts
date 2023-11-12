@@ -24,9 +24,11 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { AbstractDocument } from "src/shared/database/abstract.schema";
+import { MinerPayoutDTO } from "../dtos/miner-payout.dto";
 export declare class MinerPayout extends AbstractDocument {
     value: string;
     unlockhash: string;
+    constructor(dto?: MinerPayoutDTO);
 }
 export declare const MinerPayoutSchema: import("mongoose").Schema<MinerPayout, import("mongoose").Model<MinerPayout, any, any, any, import("mongoose").Document<unknown, any, MinerPayout> & MinerPayout & Required<{
     _id: import("mongoose").Types.ObjectId;

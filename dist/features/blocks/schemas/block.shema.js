@@ -11,11 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlockSchema = exports.Block = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
-const mongoose_2 = require("mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
 const miner_payout_schema_1 = require("./miner-payout.schema");
-const transaction_shema_1 = require("../../transactions/schemas/transaction.shema");
+const block_get_dto_1 = require("../dtos/block-get.dto");
 let Block = class Block extends abstract_schema_1.AbstractDocument {
+    constructor(dto) {
+        super();
+        if (dto) {
+            Object.assign(this, dto);
+        }
+    }
 };
 __decorate([
     (0, mongoose_1.Prop)(),
@@ -42,15 +47,15 @@ __decorate([
     __metadata("design:type", Number)
 ], Block.prototype, "timestamp", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'MinerPayout' }),
+    (0, mongoose_1.Prop)([(0, mongoose_1.raw)({
+            value: { type: String },
+            unlockhash: { type: String },
+        })]),
     __metadata("design:type", miner_payout_schema_1.MinerPayout)
 ], Block.prototype, "minerpayouts", void 0);
-__decorate([
-    (0, mongoose_1.Prop)([{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Transaction' }]),
-    __metadata("design:type", transaction_shema_1.Transaction)
-], Block.prototype, "transactions", void 0);
 Block = __decorate([
-    (0, mongoose_1.Schema)({ versionKey: false })
+    (0, mongoose_1.Schema)({ versionKey: false }),
+    __metadata("design:paramtypes", [block_get_dto_1.BlockGetDTO])
 ], Block);
 exports.Block = Block;
 exports.BlockSchema = mongoose_1.SchemaFactory.createForClass(Block);

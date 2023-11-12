@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 import { MinerPayout } from "./miner-payout.schema";
-import { Transaction } from "src/features/transactions/schemas/transaction.shema";
+import { BlockGetDTO } from "../dtos/block-get.dto";
 export declare class Block extends AbstractDocument {
     id: string;
     height: number;
@@ -10,7 +10,7 @@ export declare class Block extends AbstractDocument {
     difficulty: string;
     timestamp: number;
     minerpayouts: MinerPayout;
-    transactions: Transaction;
+    constructor(dto?: BlockGetDTO);
 }
 export declare const BlockSchema: mongoose.Schema<Block, mongoose.Model<Block, any, any, any, mongoose.Document<unknown, any, Block> & Block & Required<{
     _id: mongoose.Types.ObjectId;

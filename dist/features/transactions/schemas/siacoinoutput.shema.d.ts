@@ -28,6 +28,7 @@ export declare class SiacoinOutput extends AbstractDocument {
     id: string;
     value: string;
     unlockhash: string;
+    constructor(dto?: SiacoinOutput);
 }
 export declare const SiacoinOutputSchema: import("mongoose").Schema<SiacoinOutput, import("mongoose").Model<SiacoinOutput, any, any, any, import("mongoose").Document<unknown, any, SiacoinOutput> & SiacoinOutput & Required<{
     _id: import("mongoose").Types.ObjectId;

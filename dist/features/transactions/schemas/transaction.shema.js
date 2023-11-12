@@ -11,43 +11,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionSchema = exports.Transaction = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
-const mongoose_2 = require("mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
 const siacoinoutput_shema_1 = require("./siacoinoutput.shema");
+const transaction_dto_1 = require("../dtos/transaction.dto");
 let Transaction = class Transaction extends abstract_schema_1.AbstractDocument {
+    constructor(dto) {
+        super();
+        if (dto) {
+            Object.assign(this, dto);
+        }
+    }
 };
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Transaction.prototype, "id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'SiacoinOutputSchema' }),
-    __metadata("design:type", siacoinoutput_shema_1.SiacoinOutput)
-], Transaction.prototype, "siacoininputs", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'SiacoinOutputSchema' }),
+    (0, mongoose_1.Prop)([(0, mongoose_1.raw)({
+            id: { type: String },
+            value: { type: String },
+            unlockhash: { type: String },
+        })]),
     __metadata("design:type", siacoinoutput_shema_1.SiacoinOutput)
 ], Transaction.prototype, "siacoinoutputs", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "filecontracts", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "filecontractrevisions", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "storageproofsstorageproofs", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "siafundinputs", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "siafundoutputs", void 0);
 __decorate([
     (0, mongoose_1.Prop)([String]),
     __metadata("design:type", Array)
@@ -56,12 +42,9 @@ __decorate([
     (0, mongoose_1.Prop)([String]),
     __metadata("design:type", Array)
 ], Transaction.prototype, "arbitrarydata", void 0);
-__decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], Transaction.prototype, "transactionsignatures", void 0);
 Transaction = __decorate([
-    (0, mongoose_1.Schema)({ versionKey: false })
+    (0, mongoose_1.Schema)({ versionKey: false }),
+    __metadata("design:paramtypes", [transaction_dto_1.TransactionDTO])
 ], Transaction);
 exports.Transaction = Transaction;
 exports.TransactionSchema = mongoose_1.SchemaFactory.createForClass(Transaction);

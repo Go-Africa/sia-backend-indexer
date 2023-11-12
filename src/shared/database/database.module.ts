@@ -16,6 +16,12 @@ import { Transaction, TransactionSchema } from 'src/features/transactions/schema
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{ name: Block.name, schema: BlockSchema }]),
+    MongooseModule.forFeature([{ name: MinerPayout.name, schema: MinerPayoutSchema }]),
+    MongooseModule.forFeature([{ name: Transaction.name, schema: TransactionSchema }]),
+    MongooseModule.forFeature([{ name: TransactionSignature.name, schema: TransactionSignatureSchema }]),
+    MongooseModule.forFeature([{ name: SiacoinOutput.name, schema: SiacoinOutputSchema }]),
+    MongooseModule.forFeature([{ name: CoveredField.name, schema: CoveredFieldSchema }]),
   ],
   exports: [
     MongooseModule.forFeature([{ name: Block.name, schema: BlockSchema }]),

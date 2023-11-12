@@ -3,8 +3,8 @@ export interface BaseMapperOptions {
     exclude?: string[];
 }
 export declare class BaseMapper<D, E> {
-    dtoClass: new (entity: E) => D;
-    entityClass: new (dto: D) => E;
+    private dtoClass;
+    private entityClass;
     constructor(dtoClass: new (entity: E) => D, entityClass: new (dto: D) => E);
     toDto(entity: E, options?: BaseMapperOptions): D;
     toEntity(dto: D, options?: BaseMapperOptions): E;
