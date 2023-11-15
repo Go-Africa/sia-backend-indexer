@@ -18,65 +18,142 @@ const https = require("https");
 const rxjs_1 = require("rxjs");
 const block_repository_1 = require("../../repositories/block.repository");
 const transaction_recovery_1 = require("../../../transactions/repositories/transaction.recovery");
-const siacoinoutput_dto_1 = require("../../../transactions/dtos/siacoinoutput.dto");
 const base_mapper_1 = require("../../../../shared/helpers/base.mapper");
 const block_shema_1 = require("../../schemas/block.shema");
 const common_2 = require("@nestjs/common");
 const transaction_dto_1 = require("../../../transactions/dtos/transaction.dto");
 const transaction_shema_1 = require("../../../transactions/schemas/transaction.shema");
 const schedule_1 = require("@nestjs/schedule");
+const console_1 = require("console");
 let BlockService = BlockService_1 = class BlockService {
     constructor(httpService, blockRepository, transactionRepository) {
         this.httpService = httpService;
         this.blockRepository = blockRepository;
         this.transactionRepository = transactionRepository;
         this.logger = new common_2.Logger(BlockService_1.name);
-        this.getBlock("20032");
+        this.getHeight();
     }
     getBlocks() {
         throw new Error('Method not implemented.');
     }
-    async getBlock(height) {
-        const test = new siacoinoutput_dto_1.SiacoinOutputDTO();
-        const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus/blocks?height=${height}`;
+    async getHeight() {
+        const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus`;
         const headers = { 'User-Agent': 'Sia-Agent' };
-        var result = new block_get_dto_1.BlockGetDTO();
-        result = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
-            headers,
-            httpsAgent: new https.Agent({ rejectUnauthorized: false })
-        }).pipe((0, rxjs_1.map)(resp => resp.data)));
-        this.logger.log("adding new block...");
-        const blockMapper = new base_mapper_1.BaseMapper(block_get_dto_1.BlockGetDTO, block_shema_1.Block);
-        const savedBlock = blockMapper.toEntity(result);
-        const newBlock = await this.blockRepository.create(savedBlock)
-            .then(result => {
-            this.logger.log("added block ", result.id);
-        })
-            .catch(error => {
-            this.logger.error(error.message);
+        try {
+            this.logger.log("Checking consensus data");
+            const response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
+                headers,
+                httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+            }).pipe((0, rxjs_1.map)(resp => resp.data)));
+            if (response.height) {
+                this.currentBlockHeigh = response.height;
+                this.previousBlock = response.height;
+                const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
+                await this.getNextBlock();
+                await sleep(30000);
+                await this.getPreviousBlock();
+                this.logger.log("Result", response);
+            }
+        }
+        catch (error) {
+            this.logger.error("Error fetching consensus data", error);
+        }
+    }
+    async getNextBlock() {
+        this.logger.log("Getting next block at " + this.previousBlock);
+        if (this.previousBlock <= 0) {
+            return;
+        }
+        const result = await this.getBlock(this.previousBlock.toString());
+        (0, console_1.log)("login result value", result);
+        if (result) {
+            this.previousBlock--;
+        }
+    }
+    async getPreviousBlock() {
+        this.logger.log("Getting previous block at " + this.currentBlockHeigh);
+        const result = await this.getBlock(this.currentBlockHeigh.toString());
+        (0, console_1.log)(result);
+        if (result) {
+            this.currentBlockHeigh++;
+        }
+    }
+    async getBlock(height) {
+        const blockOfBD = await this.blockRepository.findOne({
+            height: height
+        }).catch((e) => {
+            (0, console_1.log)(e.message);
         });
-        const transactionMapper = new base_mapper_1.BaseMapper(transaction_dto_1.TransactionDTO, transaction_shema_1.Transaction);
-        const transactionsGet = result.transactions;
-        transactionsGet.map(async (transaction) => {
-            const toSaveTransaction = transactionMapper.toEntity(transaction);
-            this.logger.log("adding new transaction...");
-            const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
+        if (!blockOfBD) {
+            const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus/blocks?height=${height}`;
+            const headers = { 'User-Agent': 'Sia-Agent' };
+            var result = new block_get_dto_1.BlockGetDTO();
+            try {
+                result = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
+                    headers,
+                    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                }).pipe((0, rxjs_1.map)(resp => resp.data)));
+            }
+            catch (fetchError) {
+                this.logger.error("Error fetching block data: " + fetchError.message);
+                return;
+            }
+            const blockMapper = new base_mapper_1.BaseMapper(block_get_dto_1.BlockGetDTO, block_shema_1.Block);
+            const savedBlock = blockMapper.toEntity(result);
+            this.logger.log("adding new block... at " + height);
+            const transactionIds = [];
+            const transactionMapper = new base_mapper_1.BaseMapper(transaction_dto_1.TransactionDTO, transaction_shema_1.Transaction);
+            const transactionsGet = result.transactions;
+            for (let index = 0; index < transactionsGet.length; index++) {
+                const transaction = transactionsGet[index];
+                const toSaveTransaction = transactionMapper.toEntity(transaction);
+                const transactionOfBD = await this.transactionRepository.findOne({
+                    id: transaction.id
+                }).catch((e) => {
+                    (0, console_1.log)(e.message);
+                });
+                if (!transactionOfBD) {
+                    toSaveTransaction.height = result.height;
+                    const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
+                        .then(result => {
+                        this.logger.log("added transaction ", result.id);
+                        transactionIds.push(result.id);
+                    })
+                        .catch(err => {
+                        (0, console_1.log)(err.message);
+                        return false;
+                    });
+                }
+            }
+            savedBlock.transactionId = transactionIds;
+            const newBlock = await this.blockRepository.create(savedBlock)
                 .then(result => {
-                this.logger.log("added transaction ", result.id);
+                this.logger.log("added block ", result.id);
+                return true;
             })
-                .catch(err => {
-                this.logger.error(err.message);
+                .catch(error => {
+                this.logger.error(error.message);
+                return false;
             });
-            this.logger.log("new transaction added to database", savedTransaction);
-        });
+        }
+        else {
+            this.logger.log("block " + height + " already added");
+            return true;
+        }
     }
 };
 __decorate([
-    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_5_SECONDS),
+    (0, schedule_1.Cron)("*/4 * * * * *"),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], BlockService.prototype, "getBlock", null);
+], BlockService.prototype, "getNextBlock", null);
+__decorate([
+    (0, schedule_1.Cron)("*/3 * * * * *"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlockService.prototype, "getPreviousBlock", null);
 BlockService = BlockService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [axios_1.HttpService,

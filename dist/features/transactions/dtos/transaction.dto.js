@@ -4,10 +4,4 @@ exports.TransactionDTO = void 0;
 class TransactionDTO {
 }
 exports.TransactionDTO = TransactionDTO;
-class SiacoinInputDTO {
-}
-class Unlockcondition {
-}
-class Publickey {
-}
 //# sourceMappingURL=transaction.dto.js.map

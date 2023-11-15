@@ -8,10 +8,10 @@ import { BlockGetDTO } from "../dtos/block-get.dto";
 
 @Schema({ versionKey: false })
 export class Block extends AbstractDocument {
-    @Prop()
+    @Prop({unique: true})
     id: string;
   
-    @Prop()
+    @Prop({unique: true})
     height: number;
   
     @Prop()
@@ -25,6 +25,9 @@ export class Block extends AbstractDocument {
   
     @Prop()
     timestamp: number;
+  
+    @Prop({ type: [String], required: true })
+    transactionId: string[];
   
     @Prop([raw({
       value: {type: String},

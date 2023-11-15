@@ -23,7 +23,7 @@ let Transaction = class Transaction extends abstract_schema_1.AbstractDocument {
     }
 };
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ unique: true }),
     __metadata("design:type", String)
 ], Transaction.prototype, "id", void 0);
 __decorate([
@@ -34,6 +34,10 @@ __decorate([
         })]),
     __metadata("design:type", siacoinoutput_shema_1.SiacoinOutput)
 ], Transaction.prototype, "siacoinoutputs", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Transaction.prototype, "height", void 0);
 __decorate([
     (0, mongoose_1.Prop)([String]),
     __metadata("design:type", Array)

@@ -23,11 +23,11 @@ let Block = class Block extends abstract_schema_1.AbstractDocument {
     }
 };
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ unique: true }),
     __metadata("design:type", String)
 ], Block.prototype, "id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ unique: true }),
     __metadata("design:type", Number)
 ], Block.prototype, "height", void 0);
 __decorate([
@@ -46,6 +46,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Number)
 ], Block.prototype, "timestamp", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], required: true }),
+    __metadata("design:type", Array)
+], Block.prototype, "transactionId", void 0);
 __decorate([
     (0, mongoose_1.Prop)([(0, mongoose_1.raw)({
             value: { type: String },

@@ -1,3 +1,4 @@
+import { SiacoinInputDTO } from "./siacoininput.dto";
 import { SiacoinOutputDTO } from "./siacoinoutput.dto";
 export declare class TransactionDTO {
     id: string;
@@ -6,22 +7,9 @@ export declare class TransactionDTO {
     filecontracts: string;
     filecontractrevisions: string;
     storageproofs: string;
+    height: number;
     siafundinputs: string;
     siafundoutputs: string;
     minerfees: string[];
     arbitrarydata: string[];
 }
-declare class SiacoinInputDTO {
-    parentid: string;
-    unlockconditions: Unlockcondition;
-}
-declare class Unlockcondition {
-    timelock: number;
-    publickeys: Publickey[];
-    signaturesrequired: number;
-}
-declare class Publickey {
-    algorithm: string;
-    key: string;
-}
-export {};

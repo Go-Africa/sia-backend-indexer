@@ -9,6 +9,7 @@ export declare class Block extends AbstractDocument {
     nonce: number[];
     difficulty: string;
     timestamp: number;
+    transactionId: string[];
     minerpayouts: MinerPayout;
     constructor(dto?: BlockGetDTO);
 }

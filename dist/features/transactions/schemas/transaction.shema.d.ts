@@ -5,6 +5,7 @@ import { TransactionDTO } from "../dtos/transaction.dto";
 export declare class Transaction extends AbstractDocument {
     id: string;
     siacoinoutputs: SiacoinOutput;
+    height: number;
     minerfees: string[];
     arbitrarydata: string[];
     constructor(dto?: TransactionDTO);

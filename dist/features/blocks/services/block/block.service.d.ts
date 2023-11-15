@@ -9,6 +9,11 @@ export declare class BlockService implements IBlockService {
     private readonly transactionRepository;
     constructor(httpService: HttpService, blockRepository: BlocksRepository, transactionRepository: TransactionsRepository);
     getBlocks(): BlockGetDTO[];
+    private currentBlockHeigh;
+    private previousBlock;
     private readonly logger;
-    getBlock(height: string): Promise<void>;
+    getHeight(): Promise<void>;
+    getNextBlock(): Promise<void>;
+    getPreviousBlock(): Promise<void>;
+    getBlock(height: string): Promise<boolean>;
 }

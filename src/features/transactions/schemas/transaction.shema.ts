@@ -7,7 +7,7 @@ import { TransactionDTO } from "../dtos/transaction.dto";
 
 @Schema({ versionKey: false })
 export class Transaction extends AbstractDocument {
-    @Prop()
+    @Prop({unique: true})
     id: string;
 
     // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'SiacoinOutputSchema' })
@@ -19,6 +19,9 @@ export class Transaction extends AbstractDocument {
       unlockhash: {type: String},
     })])
     siacoinoutputs: SiacoinOutput;
+
+    @Prop()
+    height: number;
 
     // @Prop()
     // filecontracts: string;
