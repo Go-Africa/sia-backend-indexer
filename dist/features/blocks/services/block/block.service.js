@@ -70,20 +70,18 @@ let BlockService = BlockService_1 = class BlockService {
         }
     }
     async getNextBlock() {
-        this.logger.log("Getting next block at " + this.previousBlock);
+        this.logger.log("Getting previous block at " + this.previousBlock);
         if (this.previousBlock <= 0) {
             return;
         }
         const result = await this.getBlock(this.previousBlock.toString());
-        (0, console_1.log)("login result value", result);
         if (result) {
             this.previousBlock--;
         }
     }
     async getPreviousBlock() {
-        this.logger.log("Getting previous block at " + this.currentBlockHeigh);
+        this.logger.log("Getting next block at " + this.currentBlockHeigh);
         const result = await this.getBlock(this.currentBlockHeigh.toString());
-        (0, console_1.log)(result);
         if (result) {
             this.currentBlockHeigh++;
         }
@@ -126,12 +124,10 @@ let BlockService = BlockService_1 = class BlockService {
                     toSaveTransaction.height = result.height;
                     const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
-                        this.logger.log("added transaction ", result.id);
                         transactionIds.push(result.id);
                     })
                         .catch(err => {
-                        (0, console_1.log)(err.message);
-                        return false;
+                        this.logger.error(typeof (err), err.message);
                     });
                 }
             }
@@ -142,7 +138,11 @@ let BlockService = BlockService_1 = class BlockService {
                 return true;
             })
                 .catch(error => {
-                this.logger.error(error.message);
+                this.logger.error(typeof (error), error.message);
+                if (error.message.startsWith("E11000 duplicate key error collection:")) {
+                    this.logger.log("transaction " + result.id + " already added");
+                    return true;
+                }
                 return false;
             });
         }
@@ -160,17 +160,20 @@ let BlockService = BlockService_1 = class BlockService {
         if (!blockOfBD) {
             throw new common_1.HttpException("This block doen't exist", common_1.HttpStatus.NOT_FOUND);
         }
-        return blockOfBD;
+        else {
+            this.logger.log("block " + height + " already added");
+            return true;
+        }
     }
 };
 __decorate([
-    (0, schedule_1.Cron)("*/4 * * * * *"),
+    (0, schedule_1.Cron)("*/1 * * * * *"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlockService.prototype, "getNextBlock", null);
 __decorate([
-    (0, schedule_1.Cron)("*/3 * * * * *"),
+    (0, schedule_1.Cron)("*/1 * * * * *"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

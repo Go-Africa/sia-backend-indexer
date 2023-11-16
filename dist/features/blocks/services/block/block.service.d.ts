@@ -59,5 +59,5 @@ export declare class BlockService implements IBlockService {
     getNextBlock(): Promise<void>;
     getPreviousBlock(): Promise<void>;
     getBlock(height: string): Promise<boolean>;
-    getOneBlock(height: string): Promise<Block>;
+    getOneBlock(height: string): Promise<boolean>;
 }

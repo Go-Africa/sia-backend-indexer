@@ -84,24 +84,22 @@ export class BlockService implements IBlockService {
         }
     }
 
-    @Cron("*/4 * * * * *")
+    @Cron("*/1 * * * * *")
     async getNextBlock() {
-        this.logger.log("Getting next block at " + this.previousBlock)
+        this.logger.log("Getting previous block at " + this.previousBlock)
         if (this.previousBlock <= 0) {
             return;
         }
         const result = await this.getBlock(this.previousBlock.toString());
-        log("login result value", result);
         if (result) {
             this.previousBlock--;
         }
     }
 
-    @Cron("*/3 * * * * *")
+    @Cron("*/1 * * * * *")
     async getPreviousBlock() {
-        this.logger.log("Getting previous block at " + this.currentBlockHeigh)
+        this.logger.log("Getting next block at " + this.currentBlockHeigh)
         const result = await this.getBlock(this.currentBlockHeigh.toString());
-        log(result);
         if (result) {
             this.currentBlockHeigh++;
         }
@@ -114,7 +112,7 @@ export class BlockService implements IBlockService {
         }).catch((e: NotFoundException) => {
             log(e.message);
         })
-
+        
         // log("block get", blockOfBD)
         // check if already exists 
         if (!blockOfBD) {
@@ -161,12 +159,12 @@ export class BlockService implements IBlockService {
                     toSaveTransaction.height = result.height;
                     const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
-                            this.logger.log("added transaction ", result.id);
+                            // this.logger.log("added transaction ", result.id);
                             transactionIds.push(result.id);
                         })
                         .catch(err => {
-                            log(err.message);
-                            return false;
+                            this.logger.error(typeof(err), err.message);
+                            // return false;
                         });
                     // this.logger.log("new transaction added to database", savedTransaction);
                 }
@@ -175,30 +173,40 @@ export class BlockService implements IBlockService {
             savedBlock.transactionId = transactionIds;
             const newBlock = await this.blockRepository.create(savedBlock)
                 .then(result => {
+                    
                     this.logger.log("added block ", result.id);
                     return true;
                 })
                 .catch(error => {
-                    this.logger.error(error.message);
+                    this.logger.error(typeof(error), error.message);
+                    if(error.message.startsWith("E11000 duplicate key error collection:")){
+                        this.logger.log("transaction " + result.id + " already added");
+                        return true;
+                    }
                     return false;
                 });
         } else {
             this.logger.log("block " + height + " already added");
             return true;
         }
-
     }
 
-    async getOneBlock(height: string) {
+    async getOneBlock(height: string): Promise<boolean> {
         // get block from database
         const blockOfBD = await this.blockRepository.findOne({
             height: height
         }).catch((e: NotFoundException) => {
             log(e.message);
         })
+
+        // log("block get", blockOfBD)
+        // check if already exists 
         if (!blockOfBD) {
             throw new HttpException("This block doen't exist", HttpStatus.NOT_FOUND);
+        } else {
+            this.logger.log("block " + height + " already added");
+            return true;
         }
-        return blockOfBD;
+
     }
 }
