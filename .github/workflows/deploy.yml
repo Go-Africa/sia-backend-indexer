@@ -30,6 +30,6 @@ jobs:
         with:
             SOURCE: "./"
             TARGET: /home/ubuntu/repos/sia-backend-explorer
-            REMOTE_HOST: 54.198.46.109
+            REMOTE_HOST: 44.218.34.135
             REMOTE_USER: ubuntu
             SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
