@@ -1,5 +1,4 @@
-import { BlockGetDTO } from "../../dtos/block-get.dto";
-import { BlockResponseDTO } from "../../dtos/block-response.dto";
+
 
 export interface IBlockService {
     getBlocks();
