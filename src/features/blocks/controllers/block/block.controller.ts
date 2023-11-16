@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { IBlockService } from '../../services/block/Iblock.service';
 import { BlockService } from '../../services/block/block.service';
@@ -24,6 +24,14 @@ export class BlockController {
         @Query('offset') offset?: number
     ) {
         const response = await this._blockService.getBlocks(offset, page, limit);
+        return response;
+    }
+
+    @ApiResponse({ status: 200, description: 'Successfully get all activitys', type: BlockResponseDTO})
+    @ApiResponse({ status: 400, description: 'Bad request' })
+    @Get('/get-one-block/:height')
+    async getOneBlock(@Param("height") height: string){
+        const response = await this._blockService.getOneBlock(height);
         return response;
     }
 }

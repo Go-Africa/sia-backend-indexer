@@ -191,7 +191,7 @@ export class BlockService implements IBlockService {
         }
     }
 
-    async getOneBlock(height: string): Promise<boolean> {
+    async getOneBlock(height: string) {
         // get block from database
         const blockOfBD = await this.blockRepository.findOne({
             height: height
@@ -205,7 +205,7 @@ export class BlockService implements IBlockService {
             throw new HttpException("This block doen't exist", HttpStatus.NOT_FOUND);
         } else {
             this.logger.log("block " + height + " already added");
-            return true;
+            return blockOfBD;
         }
 
     }

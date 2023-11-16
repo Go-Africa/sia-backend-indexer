@@ -25,6 +25,10 @@ let BlockController = class BlockController {
         const response = await this._blockService.getBlocks(offset, page, limit);
         return response;
     }
+    async getOneBlock(height) {
+        const response = await this._blockService.getOneBlock(height);
+        return response;
+    }
 };
 __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys', type: block_response_dto_1.BlockResponseDTO }),
@@ -40,6 +44,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number, Number]),
     __metadata("design:returntype", Promise)
 ], BlockController.prototype, "getAllactivity", null);
+__decorate([
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys', type: block_response_dto_1.BlockResponseDTO }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
+    (0, common_1.Get)('/get-one-block/:height'),
+    __param(0, (0, common_1.Param)("height")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BlockController.prototype, "getOneBlock", null);
 BlockController = __decorate([
     (0, swagger_1.ApiTags)('block'),
     (0, common_1.Controller)('block'),

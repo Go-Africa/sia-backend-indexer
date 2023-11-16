@@ -162,7 +162,7 @@ let BlockService = BlockService_1 = class BlockService {
         }
         else {
             this.logger.log("block " + height + " already added");
-            return true;
+            return blockOfBD;
         }
     }
 };

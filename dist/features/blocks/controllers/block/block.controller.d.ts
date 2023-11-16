@@ -45,4 +45,5 @@ export declare class BlockController {
     }, import("../../schemas/block.shema").Block> & import("../../schemas/block.shema").Block & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>>>;
+    getOneBlock(height: string): Promise<import("../../schemas/block.shema").Block>;
 }
