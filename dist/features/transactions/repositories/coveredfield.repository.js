@@ -29,8 +29,7 @@ CoveredFieldsRepository = CoveredFieldsRepository_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(coveredfields_schema_1.CoveredField.name)),
     __param(1, (0, mongoose_1.InjectConnection)()),
-    __metadata("design:paramtypes", [mongoose_2.Model,
-        mongoose_2.Connection])
+    __metadata("design:paramtypes", [Object, mongoose_2.Connection])
 ], CoveredFieldsRepository);
 exports.CoveredFieldsRepository = CoveredFieldsRepository;
 //# sourceMappingURL=coveredfield.repository.js.map

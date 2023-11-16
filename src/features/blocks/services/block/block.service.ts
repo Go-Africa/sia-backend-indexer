@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { IBlockService } from './Iblock.service';
 import { BlockGetDTO } from '../../dtos/block-get.dto';
 import { HttpService } from '@nestjs/axios';
@@ -10,16 +10,17 @@ import { SiacoinOutputDTO } from 'src/features/transactions/dtos/siacoinoutput.d
 import { BaseMapper } from 'src/shared/helpers/base.mapper';
 import { Block } from '../../schemas/block.shema';
 
-import * as nacl from 'tweetnacl';
-import * as util from 'tweetnacl-util';
+// import * as nacl from 'tweetnacl';
+// import * as util from 'tweetnacl-util';
 
 import { Logger } from '@nestjs/common';
 import { TransactionDTO } from 'src/features/transactions/dtos/transaction.dto';
 import { Transaction } from 'src/features/transactions/schemas/transaction.shema';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
-import { SiacoinInputDTO } from 'src/features/transactions/dtos/siacoininput.dto';
+// import { SiacoinInputDTO } from 'src/features/transactions/dtos/siacoininput.dto';
 import { log } from 'console';
+import { BlockResponseDTO } from '../../dtos/block-response.dto';
 
 @Injectable()
 export class BlockService implements IBlockService {
@@ -29,54 +30,31 @@ export class BlockService implements IBlockService {
         private readonly blockRepository: BlocksRepository,
         private readonly transactionRepository: TransactionsRepository,
     ) {
-        this.getHeight()
-        // this.subscribe()
+        this.getBlocks()
     }
-    getBlocks(): BlockGetDTO[] {
-        throw new Error('Method not implemented.');
+    baseUrl = process.env.RENTERD_BASE_URL;
+
+    async getBlocks(offset: number = 0, page: number = 0, limit: number = 10) {
+        try {
+            // Exécutez la requête avec pagination et tri
+            const blocks = await this.blockRepository
+                .findPaginate({}, offset, page, limit)
+            log("result", blocks)
+            return blocks;
+        } catch (error) {
+            // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception
+            console.error('Erreur lors de la récupération des blocs :', error);
+            throw new Error('Erreur lors de la récupération des blocs.');
+        }
     }
+
     private currentBlockHeigh: number;
     private previousBlock: number;
 
     private readonly logger = new Logger(BlockService.name);
-    // private readonly apiUrl = 'https://f33d-54-198-46-109.ngrok-free.app/consensus/subscribe/0100000000000000000000000000000000000000000000000000000000000000';
-
-    // subscribeToConsensusStream(): Observable<any> {
-    //   return new Observable((observer) => {
-    //     const source = axios.CancelToken.source();
-
-    //     const intervalId = setInterval(() => {
-    //       axios.get(this.apiUrl, { headers: { 'User-Agent': 'Sia-Agent' }, cancelToken: source.token })
-    //         .then((response) => {
-    //           observer.next(response.data);
-    //         })
-    //         .catch((error) => {
-    //           if (axios.isCancel(error)) {
-    //             // Subscription cancelled
-    //             observer.complete();
-    //           } else {
-    //             observer.error(error);
-    //           }
-    //         });
-    //     }, 1000); // Adjust the interval as needed
-
-    //     return () => {
-    //       clearInterval(intervalId);
-    //       source.cancel('Subscription cancelled');
-    //     };
-    //   }).pipe(
-    //     map((data: any) => {
-    //       // Process and transform the data as needed
-    //       this.logger.log('Received data from consensus stream:', data);
-    //       return data;
-    //     }),
-    //   );
-    // }
-
-    // set cron ton execute request every day
 
     async getHeight() {
-        const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus`;
+        const url = `${this.baseUrl}/consensus`;
         const headers = { 'User-Agent': 'Sia-Agent' };
 
         try {
@@ -129,7 +107,6 @@ export class BlockService implements IBlockService {
         }
     }
 
-
     async getBlock(height: string): Promise<boolean> {
         // get block from database
         const blockOfBD = await this.blockRepository.findOne({
@@ -141,7 +118,7 @@ export class BlockService implements IBlockService {
         // log("block get", blockOfBD)
         // check if already exists 
         if (!blockOfBD) {
-            const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus/blocks?height=${height}`;
+            const url = `${this.baseUrl}/consensus/blocks?height=${height}`;
             const headers = { 'User-Agent': 'Sia-Agent' };
             var result = new BlockGetDTO();
             try {
@@ -212,51 +189,16 @@ export class BlockService implements IBlockService {
 
     }
 
-
-
-    // // Fonction pour décoder la clé publique
-    // private decodePublicKey(key: string): Uint8Array {
-    //     return util.decodeBase64(key);
-    // }
-
-    // // Fonction pour vérifier la signature
-    // private verifySignature(message: Uint8Array, signature: Uint8Array, publicKey: Uint8Array): boolean {
-    //     return nacl.sign.detached.verify(message, signature, publicKey);
-    // }
-
-    // // Fonction pour décrypter une SiacoinOutput individuelle
-    // private decryptSiacoinOutput(unlockhash: string, value: string): any {
-    //     // Ajoutez ici la logique pour décrypter les données selon votre besoin.
-    //     // Dans cet exemple, nous retournons simplement les mêmes données.
-    //     return { unlockhash, value };
-    // }
-
-    // // Fonction pour décrypter les SiacoinOutputs
-    // private decryptSiacoinOutputs(outputs: SiacoinInputDTO[]): any[] {
-    //     const decryptedOutputs = [];
-
-    //     outputs.forEach(output => {
-    //         const unlockhash = output.unlockhash;
-    //         const value = output.value;
-
-    //         // Décoder la clé publique
-    //         const publicKey = this.decodePublicKey(output.unlockconditions.publickeys[0].key);
-
-    //         // Vérifier la signature
-    //         const isValidSignature = this.verifySignature(value, output.signature, publicKey);
-
-    //         // Si la signature est valide, décrypter les données
-    //         if (isValidSignature) {
-    //             const decryptedData = this.decryptSiacoinOutput(unlockhash, value);
-    //             decryptedOutputs.push(decryptedData);
-    //         } else {
-    //             this.logger.warn(`Invalid signature for SiacoinOutput with unlockhash: ${unlockhash}. Skipping decryption.`);
-    //         }
-    //     });
-
-    //     return decryptedOutputs;
-    // }
-
-
-
+    async getOneBlock(height: string) {
+        // get block from database
+        const blockOfBD = await this.blockRepository.findOne({
+            height: height
+        }).catch((e: NotFoundException) => {
+            log(e.message);
+        })
+        if (!blockOfBD) {
+            throw new HttpException("This block doen't exist", HttpStatus.NOT_FOUND);
+        }
+        return blockOfBD;
+    }
 }

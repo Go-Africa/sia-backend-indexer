@@ -23,6 +23,7 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
+/// <reference types="mongoose-paginate-v2" />
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 import { MinerPayoutDTO } from "../dtos/miner-payout.dto";
 export declare class MinerPayout extends AbstractDocument {

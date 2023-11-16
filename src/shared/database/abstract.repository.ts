@@ -6,6 +6,7 @@ import {
   UpdateQuery,
   SaveOptions,
   Connection,
+  PaginateModel
 } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
@@ -13,9 +14,9 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   protected abstract readonly logger: Logger;
 
   constructor(
-    protected readonly model: Model<TDocument>,
+    protected readonly model: PaginateModel<TDocument>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async create(
     document: Omit<TDocument, '_id'>,
@@ -32,15 +33,15 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
   async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true }) as TDocument;
-  
+
     if (!document) {
       this.logger.warn('Document not found with filterQuery', filterQuery);
       throw new NotFoundException('Document not found.');
     }
-  
+
     return document;
   }
-  
+
 
   async findOneAndUpdate(
     filterQuery: FilterQuery<TDocument>,
@@ -72,6 +73,18 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
   async find(filterQuery: FilterQuery<TDocument>) {
     return this.model.find(filterQuery, {}, { lean: true });
+  }
+
+  async findPaginate(filterQuery: FilterQuery<TDocument>, offset: number = 0, page: number = 0, limit: number = 10) {
+
+    const customLabels = {
+      docs: 'data',
+      page: 'currentPage',
+      totalPages: 'pageCount',
+      limit: 'perPage',
+      totalDocs: 'itemCount',
+    };
+    return this.model.paginate(filterQuery, { customLabels, offset, limit, page, sort: { timestamp: -1 } });
   }
 
   async startTransaction() {

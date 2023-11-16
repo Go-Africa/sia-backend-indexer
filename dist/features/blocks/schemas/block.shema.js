@@ -14,6 +14,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
 const miner_payout_schema_1 = require("./miner-payout.schema");
 const block_get_dto_1 = require("../dtos/block-get.dto");
+const paginate = require("mongoose-paginate-v2");
 let Block = class Block extends abstract_schema_1.AbstractDocument {
     constructor(dto) {
         super();
@@ -63,4 +64,5 @@ Block = __decorate([
 ], Block);
 exports.Block = Block;
 exports.BlockSchema = mongoose_1.SchemaFactory.createForClass(Block);
+exports.BlockSchema.plugin(paginate);
 //# sourceMappingURL=block.shema.js.map

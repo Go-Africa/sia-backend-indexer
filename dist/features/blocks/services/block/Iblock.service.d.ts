@@ -1,5 +1,4 @@
-import { BlockGetDTO } from "../../dtos/block-get.dto";
 export interface IBlockService {
-    getBlocks(): BlockGetDTO[];
+    getBlocks(): any;
     getBlock(id: string): Promise<boolean>;
 }

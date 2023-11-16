@@ -30,14 +30,24 @@ let BlockService = BlockService_1 = class BlockService {
         this.httpService = httpService;
         this.blockRepository = blockRepository;
         this.transactionRepository = transactionRepository;
+        this.baseUrl = process.env.RENTERD_BASE_URL;
         this.logger = new common_2.Logger(BlockService_1.name);
-        this.getHeight();
+        this.getBlocks();
     }
-    getBlocks() {
-        throw new Error('Method not implemented.');
+    async getBlocks(page = 1, pageSize = 10) {
+        try {
+            const blocks = await this.blockRepository
+                .findPaginate({});
+            (0, console_1.log)("result", blocks);
+            return blocks;
+        }
+        catch (error) {
+            console.error('Erreur lors de la récupération des blocs :', error);
+            throw new Error('Erreur lors de la récupération des blocs.');
+        }
     }
     async getHeight() {
-        const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus`;
+        const url = `${this.baseUrl}/consensus`;
         const headers = { 'User-Agent': 'Sia-Agent' };
         try {
             this.logger.log("Checking consensus data");
@@ -85,7 +95,7 @@ let BlockService = BlockService_1 = class BlockService {
             (0, console_1.log)(e.message);
         });
         if (!blockOfBD) {
-            const url = `https://f33d-54-198-46-109.ngrok-free.app/consensus/blocks?height=${height}`;
+            const url = `${this.baseUrl}/consensus/blocks?height=${height}`;
             const headers = { 'User-Agent': 'Sia-Agent' };
             var result = new block_get_dto_1.BlockGetDTO();
             try {

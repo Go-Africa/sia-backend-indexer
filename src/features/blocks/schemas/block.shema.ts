@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
-import mongoose from "mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 import { MinerPayout } from "./miner-payout.schema";
-import { Transaction } from "src/features/transactions/schemas/transaction.shema";
 import { BlockGetDTO } from "../dtos/block-get.dto";
+import * as paginate from "mongoose-paginate-v2";
 
 
 @Schema({ versionKey: false })
@@ -48,3 +47,4 @@ export class Block extends AbstractDocument {
   }
   
 export const BlockSchema = SchemaFactory.createForClass(Block);
+BlockSchema.plugin(paginate);
