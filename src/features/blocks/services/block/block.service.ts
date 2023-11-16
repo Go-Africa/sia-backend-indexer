@@ -30,7 +30,7 @@ export class BlockService implements IBlockService {
         private readonly blockRepository: BlocksRepository,
         private readonly transactionRepository: TransactionsRepository,
     ) {
-        this.getBlocks()
+        this.getHeight()
     }
     baseUrl = process.env.RENTERD_BASE_URL;
 

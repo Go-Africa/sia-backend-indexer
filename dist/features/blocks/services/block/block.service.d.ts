@@ -35,7 +35,7 @@ export declare class BlockService implements IBlockService {
     private readonly transactionRepository;
     constructor(httpService: HttpService, blockRepository: BlocksRepository, transactionRepository: TransactionsRepository);
     baseUrl: string;
-    getBlocks(page?: number, pageSize?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
+    getBlocks(offset?: number, page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         customLabels: {
             docs: string;
             page: string;
@@ -59,4 +59,5 @@ export declare class BlockService implements IBlockService {
     getNextBlock(): Promise<void>;
     getPreviousBlock(): Promise<void>;
     getBlock(height: string): Promise<boolean>;
+    getOneBlock(height: string): Promise<Block>;
 }

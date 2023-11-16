@@ -32,12 +32,12 @@ let BlockService = BlockService_1 = class BlockService {
         this.transactionRepository = transactionRepository;
         this.baseUrl = process.env.RENTERD_BASE_URL;
         this.logger = new common_2.Logger(BlockService_1.name);
-        this.getBlocks();
+        this.getHeight();
     }
-    async getBlocks(page = 1, pageSize = 10) {
+    async getBlocks(offset = 0, page = 0, limit = 10) {
         try {
             const blocks = await this.blockRepository
-                .findPaginate({});
+                .findPaginate({}, offset, page, limit);
             (0, console_1.log)("result", blocks);
             return blocks;
         }
@@ -150,6 +150,17 @@ let BlockService = BlockService_1 = class BlockService {
             this.logger.log("block " + height + " already added");
             return true;
         }
+    }
+    async getOneBlock(height) {
+        const blockOfBD = await this.blockRepository.findOne({
+            height: height
+        }).catch((e) => {
+            (0, console_1.log)(e.message);
+        });
+        if (!blockOfBD) {
+            throw new common_1.HttpException("This block doen't exist", common_1.HttpStatus.NOT_FOUND);
+        }
+        return blockOfBD;
     }
 };
 __decorate([

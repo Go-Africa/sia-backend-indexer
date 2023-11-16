@@ -41,7 +41,7 @@ class AbstractRepository {
     async find(filterQuery) {
         return this.model.find(filterQuery, {}, { lean: true });
     }
-    async findPaginate(filterQuery, offset = 20, page = 0, limit = 10) {
+    async findPaginate(filterQuery, offset = 0, page = 0, limit = 10) {
         const customLabels = {
             docs: 'data',
             page: 'currentPage',
