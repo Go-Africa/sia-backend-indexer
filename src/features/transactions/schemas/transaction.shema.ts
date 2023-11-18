@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 import { SiacoinOutput } from "./siacoinoutput.shema";
 import { TransactionDTO } from "../dtos/transaction.dto";
+import * as paginate from "mongoose-paginate-v2";
 
 
 @Schema({ versionKey: false })
@@ -18,10 +19,13 @@ export class Transaction extends AbstractDocument {
       value: {type: String},
       unlockhash: {type: String},
     })])
-    siacoinoutputs: SiacoinOutput;
+    siacoinoutputs
 
     @Prop()
     height: number;
+
+    @Prop()
+    timestamp: number;
 
     // @Prop()
     // filecontracts: string;
@@ -58,3 +62,4 @@ export class Transaction extends AbstractDocument {
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);
+TransactionSchema.plugin(paginate);

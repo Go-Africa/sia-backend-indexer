@@ -1,7 +1,6 @@
 import { SiacoinInputDTO } from "./siacoininput.dto";
 import { SiacoinOutputDTO } from "./siacoinoutput.dto";
-
-export class TransactionDTO {
+export declare class TransactionResponseDTO {
     id: string;
     siacoininputs: SiacoinInputDTO[];
     siacoinoutputs: SiacoinOutputDTO[];
@@ -14,6 +13,4 @@ export class TransactionDTO {
     minerfees: string[];
     arbitrarydata: string[];
     timestamp: number;
-    // transactionsignatures: TransactionSignatureDTO[];
 }
-

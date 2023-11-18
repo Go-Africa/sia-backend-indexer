@@ -43,7 +43,7 @@ let BlockService = BlockService_1 = class BlockService {
         }
         catch (error) {
             console.error('Erreur lors de la récupération des blocs :', error);
-            throw new Error('Erreur lors de la récupération des blocs.');
+            throw new common_1.HttpException(error.message, common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async getHeight() {
@@ -122,6 +122,8 @@ let BlockService = BlockService_1 = class BlockService {
                 });
                 if (!transactionOfBD) {
                     toSaveTransaction.height = result.height;
+                    toSaveTransaction.timestamp = result.timestamp;
+                    toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
                     const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
                         transactionIds.push(result.id);

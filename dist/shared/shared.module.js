@@ -10,15 +10,20 @@ exports.SharedModule = void 0;
 const common_1 = require("@nestjs/common");
 const database_module_1 = require("./database/database.module");
 const interceptor_module_1 = require("./interceptors/interceptor.module");
+const axios_1 = require("@nestjs/axios");
 let SharedModule = class SharedModule {
 };
 SharedModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            axios_1.HttpModule,
             database_module_1.DatabaseModule,
             interceptor_module_1.InterceptorModule
         ],
-        exports: [database_module_1.DatabaseModule]
+        exports: [
+            database_module_1.DatabaseModule,
+            axios_1.HttpModule
+        ]
     })
 ], SharedModule);
 exports.SharedModule = SharedModule;

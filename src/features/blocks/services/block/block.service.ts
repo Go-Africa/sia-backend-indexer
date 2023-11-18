@@ -44,7 +44,7 @@ export class BlockService implements IBlockService {
         } catch (error) {
             // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception
             console.error('Erreur lors de la récupération des blocs :', error);
-            throw new Error('Erreur lors de la récupération des blocs.');
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -153,10 +153,12 @@ export class BlockService implements IBlockService {
                 }).catch((e: NotFoundException) => {
                     log(e.message)
                 });
-                // log("transactionOfBD get", transactionOfBD);
+                // log("transactionOfBD get", toSaveTransaction);
 
                 if (!transactionOfBD) {
                     toSaveTransaction.height = result.height;
+                    toSaveTransaction.timestamp = result.timestamp;
+                    toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
                     const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
                             // this.logger.log("added transaction ", result.id);

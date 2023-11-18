@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionSchema = exports.Transaction = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
-const siacoinoutput_shema_1 = require("./siacoinoutput.shema");
 const transaction_dto_1 = require("../dtos/transaction.dto");
+const paginate = require("mongoose-paginate-v2");
 let Transaction = class Transaction extends abstract_schema_1.AbstractDocument {
     constructor(dto) {
         super();
@@ -32,12 +32,16 @@ __decorate([
             value: { type: String },
             unlockhash: { type: String },
         })]),
-    __metadata("design:type", siacoinoutput_shema_1.SiacoinOutput)
+    __metadata("design:type", Object)
 ], Transaction.prototype, "siacoinoutputs", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Number)
 ], Transaction.prototype, "height", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Transaction.prototype, "timestamp", void 0);
 __decorate([
     (0, mongoose_1.Prop)([String]),
     __metadata("design:type", Array)
@@ -52,4 +56,5 @@ Transaction = __decorate([
 ], Transaction);
 exports.Transaction = Transaction;
 exports.TransactionSchema = mongoose_1.SchemaFactory.createForClass(Transaction);
+exports.TransactionSchema.plugin(paginate);
 //# sourceMappingURL=transaction.shema.js.map

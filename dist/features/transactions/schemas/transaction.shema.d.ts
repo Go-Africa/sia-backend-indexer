@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
-import { SiacoinOutput } from "./siacoinoutput.shema";
 import { TransactionDTO } from "../dtos/transaction.dto";
 export declare class Transaction extends AbstractDocument {
     id: string;
-    siacoinoutputs: SiacoinOutput;
+    siacoinoutputs: any;
     height: number;
+    timestamp: number;
     minerfees: string[];
     arbitrarydata: string[];
     constructor(dto?: TransactionDTO);

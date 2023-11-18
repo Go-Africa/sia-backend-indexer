@@ -10,7 +10,6 @@ exports.BlocksModule = void 0;
 const common_1 = require("@nestjs/common");
 const block_service_1 = require("./services/block/block.service");
 const block_controller_1 = require("./controllers/block/block.controller");
-const axios_1 = require("@nestjs/axios");
 const coveredfield_repository_1 = require("../transactions/repositories/coveredfield.repository");
 const siacoinoutput_recovery_1 = require("../transactions/repositories/siacoinoutput.recovery");
 const transaction_signature_recovery_1 = require("../transactions/repositories/transaction-signature.recovery");
@@ -23,7 +22,6 @@ let BlocksModule = class BlocksModule {
 BlocksModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            axios_1.HttpModule,
             shared_module_1.SharedModule,
             schedule_1.ScheduleModule.forRoot()
         ],

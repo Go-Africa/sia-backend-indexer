@@ -10,12 +10,22 @@ exports.TransactionsModule = void 0;
 const common_1 = require("@nestjs/common");
 const transaction_service_1 = require("./services/transaction/transaction.service");
 const transaction_controller_1 = require("./controllers/transaction/transaction.controller");
+const shared_module_1 = require("../../shared/shared.module");
+const transaction_recovery_1 = require("./repositories/transaction.recovery");
 let TransactionsModule = class TransactionsModule {
 };
 TransactionsModule = __decorate([
     (0, common_1.Module)({
-        providers: [transaction_service_1.TransactionService],
-        controllers: [transaction_controller_1.TransactionController]
+        imports: [
+            shared_module_1.SharedModule
+        ],
+        providers: [
+            transaction_service_1.TransactionService,
+            transaction_recovery_1.TransactionsRepository
+        ],
+        controllers: [
+            transaction_controller_1.TransactionController
+        ]
     })
 ], TransactionsModule);
 exports.TransactionsModule = TransactionsModule;

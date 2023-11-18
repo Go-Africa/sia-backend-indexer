@@ -12,4 +12,5 @@ export declare class TransactionDTO {
     siafundoutputs: string;
     minerfees: string[];
     arbitrarydata: string[];
+    timestamp: number;
 }

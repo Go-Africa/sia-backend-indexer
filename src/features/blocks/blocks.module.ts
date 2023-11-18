@@ -12,7 +12,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    HttpModule,
     SharedModule,
     // schedulemodule to detect and execute cron functions
     ScheduleModule.forRoot()
