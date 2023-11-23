@@ -16,14 +16,12 @@ export class BlockController {
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })
-    @ApiQuery({ name: 'offset', required: false })
     @Get('/get-all-blocks')
     async getAllBlock(
         @Query('page') page?: number,
         @Query('limit') limit?: number,
-        @Query('offset') offset?: number
     ) {
-        const response = await this._blockService.getBlocks(offset, page, limit);
+        const response = await this._blockService.getBlocks(page, limit);
         return response;
     }
 

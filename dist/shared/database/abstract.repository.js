@@ -41,15 +41,11 @@ class AbstractRepository {
     async find(filterQuery) {
         return this.model.find(filterQuery, {}, { lean: true });
     }
-    async findPaginate(filterQuery, offset = 0, page = 0, limit = 10) {
-        const customLabels = {
-            docs: 'data',
-            page: 'currentPage',
-            totalPages: 'pageCount',
-            limit: 'perPage',
-            totalDocs: 'itemCount',
-        };
-        return this.model.paginate(filterQuery, { customLabels, offset, limit, page, sort: { timestamp: -1 } });
+    async findPaginate(filterQuery, offset, page, limit) {
+        console.log('Offset:', offset);
+        console.log('Page:', page);
+        console.log('Limit:', limit);
+        return await this.model.paginate(filterQuery, { offset: offset, page: page, limit: limit });
     }
     async startTransaction() {
         const session = await this.connection.startSession();

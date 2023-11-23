@@ -19,7 +19,7 @@ export class AuthInterceptor implements NestInterceptor {
     // Add the Basic authorization header to the request object
     request.headers['Authorization'] = `Basic ${base64Credentials}`;
     request.headers['User-Agent'] = 'Sia-Agent';
-    log("headers requests", request.headers);
+    // log("headers requests", request.headers);
 
     return next.handle();
   }

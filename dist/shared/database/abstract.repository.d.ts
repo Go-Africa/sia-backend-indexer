@@ -36,20 +36,6 @@ export declare abstract class AbstractRepository<TDocument extends AbstractDocum
     findOneAndUpdate(filterQuery: FilterQuery<TDocument>, update: UpdateQuery<TDocument>): Promise<TDocument extends any[] ? import("mongoose").Require_id<import("mongoose").FlattenMaps<TDocument>>[] : import("mongoose").Require_id<import("mongoose").FlattenMaps<TDocument>>>;
     upsert(filterQuery: FilterQuery<TDocument>, document: Partial<TDocument>): Promise<TDocument extends any[] ? import("mongoose").Require_id<import("mongoose").FlattenMaps<TDocument>>[] : import("mongoose").Require_id<import("mongoose").FlattenMaps<TDocument>>>;
     find(filterQuery: FilterQuery<TDocument>): Promise<import("mongoose").Require_id<import("mongoose").FlattenMaps<TDocument>>[]>;
-    findPaginate(filterQuery: FilterQuery<TDocument>, offset?: number, page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").IfAny<TDocument, any, import("mongoose").Document<unknown, {
-        customLabels: {
-            docs: string;
-            page: string;
-            totalPages: string;
-            limit: string;
-            totalDocs: string;
-        };
-        offset: number;
-        limit: number;
-        page: number;
-        sort: {
-            timestamp: number;
-        };
-    }, TDocument> & import("mongoose").Require_id<TDocument>>>>;
+    findPaginate(filterQuery: FilterQuery<TDocument>, offset: number, page: number, limit: number): Promise<import("mongoose").PaginateResult<import("mongoose").IfAny<TDocument, any, import("mongoose").Document<unknown, import("mongoose").PaginateOptions, TDocument> & import("mongoose").Require_id<TDocument>>>>;
     startTransaction(): Promise<import("mongodb").ClientSession>;
 }

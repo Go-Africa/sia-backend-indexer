@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthInterceptor = void 0;
 const common_1 = require("@nestjs/common");
-const console_1 = require("console");
 let AuthInterceptor = class AuthInterceptor {
     constructor(username, password) {
         this.username = username;
@@ -25,7 +24,6 @@ let AuthInterceptor = class AuthInterceptor {
         const base64Credentials = Buffer.from(`${this.username}:${this.password}`).toString('base64');
         request.headers['Authorization'] = `Basic ${base64Credentials}`;
         request.headers['User-Agent'] = 'Sia-Agent';
-        (0, console_1.log)("headers requests", request.headers);
         return next.handle();
     }
 };

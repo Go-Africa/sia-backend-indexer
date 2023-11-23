@@ -31,21 +31,7 @@ export declare class TransactionService {
     private readonly transactionRepository;
     constructor(httpService: HttpService, transactionRepository: TransactionsRepository);
     baseUrl: string;
-    getTransactions(offset?: number, page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
-        customLabels: {
-            docs: string;
-            page: string;
-            totalPages: string;
-            limit: string;
-            totalDocs: string;
-        };
-        offset: number;
-        limit: number;
-        page: number;
-        sort: {
-            timestamp: number;
-        };
-    }, import("../../schemas/transaction.shema").Transaction> & import("../../schemas/transaction.shema").Transaction & Required<{
+    getTransactions(page: number, limit: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, import("mongoose").PaginateOptions, import("../../schemas/transaction.shema").Transaction> & import("../../schemas/transaction.shema").Transaction & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>>>;
     getOneTransaction(id: string): Promise<import("../../schemas/transaction.shema").Transaction>;

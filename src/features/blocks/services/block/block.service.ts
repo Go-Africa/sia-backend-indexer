@@ -23,7 +23,7 @@ import { log } from 'console';
 import { BlockResponseDTO } from '../../dtos/block-response.dto';
 
 @Injectable()
-export class BlockService implements IBlockService {
+export class BlockService  {
 
     constructor(
         private httpService: HttpService,
@@ -34,12 +34,13 @@ export class BlockService implements IBlockService {
     }
     baseUrl = process.env.RENTERD_BASE_URL;
 
-    async getBlocks(offset: number = 0, page: number = 0, limit: number = 10) {
+    async getBlocks(page?: number, limit?: number) {
         try {
+            const offset = (page - 1) * limit;
             // Exécutez la requête avec pagination et tri
             const blocks = await this.blockRepository
                 .findPaginate({}, offset, page, limit)
-            log("result", blocks)
+            // log("result", blocks)
             return blocks;
         } catch (error) {
             // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception
@@ -76,7 +77,7 @@ export class BlockService implements IBlockService {
                 await sleep(30000);
                 await this.getPreviousBlock();
 
-                this.logger.log("Result", response);
+                // this.logger.log("Result", response);
             }
 
         } catch (error) {
@@ -159,7 +160,7 @@ export class BlockService implements IBlockService {
                     toSaveTransaction.height = result.height;
                     toSaveTransaction.timestamp = result.timestamp;
                     toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
-                    const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
+                    const savedTransaction = this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
                             // this.logger.log("added transaction ", result.id);
                             transactionIds.push(result.id);
@@ -173,7 +174,7 @@ export class BlockService implements IBlockService {
             }
             // add transactionIds to the saved block
             savedBlock.transactionId = transactionIds;
-            const newBlock = await this.blockRepository.create(savedBlock)
+            const newBlock = this.blockRepository.create(savedBlock)
                 .then(result => {
                     
                     this.logger.log("added block ", result.id);

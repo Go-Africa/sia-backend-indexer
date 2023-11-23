@@ -28,21 +28,7 @@ import { BlockService } from '../../services/block/block.service';
 export declare class BlockController {
     private _blockService;
     constructor(_blockService: BlockService);
-    getAllBlock(page?: number, limit?: number, offset?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
-        customLabels: {
-            docs: string;
-            page: string;
-            totalPages: string;
-            limit: string;
-            totalDocs: string;
-        };
-        offset: number;
-        limit: number;
-        page: number;
-        sort: {
-            timestamp: number;
-        };
-    }, import("../../schemas/block.shema").Block> & import("../../schemas/block.shema").Block & Required<{
+    getAllBlock(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, import("mongoose").PaginateOptions, import("../../schemas/block.shema").Block> & import("../../schemas/block.shema").Block & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>>>;
     getOneBlock(height: string): Promise<import("../../schemas/block.shema").Block>;

@@ -34,11 +34,11 @@ let BlockService = BlockService_1 = class BlockService {
         this.logger = new common_2.Logger(BlockService_1.name);
         this.getHeight();
     }
-    async getBlocks(offset = 0, page = 0, limit = 10) {
+    async getBlocks(page, limit) {
         try {
+            const offset = (page - 1) * limit;
             const blocks = await this.blockRepository
                 .findPaginate({}, offset, page, limit);
-            (0, console_1.log)("result", blocks);
             return blocks;
         }
         catch (error) {
@@ -62,7 +62,6 @@ let BlockService = BlockService_1 = class BlockService {
                 await this.getNextBlock();
                 await sleep(30000);
                 await this.getPreviousBlock();
-                this.logger.log("Result", response);
             }
         }
         catch (error) {
@@ -124,7 +123,7 @@ let BlockService = BlockService_1 = class BlockService {
                     toSaveTransaction.height = result.height;
                     toSaveTransaction.timestamp = result.timestamp;
                     toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
-                    const savedTransaction = await this.transactionRepository.create(toSaveTransaction)
+                    const savedTransaction = this.transactionRepository.create(toSaveTransaction)
                         .then(result => {
                         transactionIds.push(result.id);
                     })
@@ -134,7 +133,7 @@ let BlockService = BlockService_1 = class BlockService {
                 }
             }
             savedBlock.transactionId = transactionIds;
-            const newBlock = await this.blockRepository.create(savedBlock)
+            const newBlock = this.blockRepository.create(savedBlock)
                 .then(result => {
                 this.logger.log("added block ", result.id);
                 return true;

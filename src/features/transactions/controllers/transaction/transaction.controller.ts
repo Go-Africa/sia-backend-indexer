@@ -14,14 +14,12 @@ export class TransactionController {
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })
-    @ApiQuery({ name: 'offset', required: false })
     @Get('/get-all-transactions')
     async getAllTransaction(
         @Query('page') page?: number,
         @Query('limit') limit?: number,
-        @Query('offset') offset?: number
     ) {
-        const response = await this._transactionService.getTransactions(offset, page, limit);
+        const response = await this._transactionService.getTransactions(page, limit);
         return response;
     }
 

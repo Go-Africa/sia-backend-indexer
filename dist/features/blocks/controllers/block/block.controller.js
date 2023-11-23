@@ -21,8 +21,8 @@ let BlockController = class BlockController {
     constructor(_blockService) {
         this._blockService = _blockService;
     }
-    async getAllBlock(page, limit, offset) {
-        const response = await this._blockService.getBlocks(offset, page, limit);
+    async getAllBlock(page, limit) {
+        const response = await this._blockService.getBlocks(page, limit);
         return response;
     }
     async getOneBlock(height) {
@@ -35,13 +35,11 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),
-    (0, swagger_1.ApiQuery)({ name: 'offset', required: false }),
     (0, common_1.Get)('/get-all-blocks'),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
-    __param(2, (0, common_1.Query)('offset')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Number]),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], BlockController.prototype, "getAllBlock", null);
 __decorate([

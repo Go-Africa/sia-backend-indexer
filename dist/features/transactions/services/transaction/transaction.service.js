@@ -20,8 +20,9 @@ let TransactionService = class TransactionService {
         this.transactionRepository = transactionRepository;
         this.baseUrl = process.env.RENTERD_BASE_URL;
     }
-    async getTransactions(offset = 0, page = 0, limit = 10) {
+    async getTransactions(page, limit) {
         try {
+            const offset = (page - 1) * limit;
             const transactions = await this.transactionRepository
                 .findPaginate({}, offset, page, limit);
             (0, console_1.log)("result", transactions);

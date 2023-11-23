@@ -12,8 +12,9 @@ export class TransactionService {
     ) { }
     baseUrl = process.env.RENTERD_BASE_URL;
 
-    async getTransactions(offset: number = 0, page: number = 0, limit: number = 10) {
+    async getTransactions(page: number, limit: number) {
         try {
+            const offset = (page - 1) * limit;
             // Exécutez la requête avec pagination et tri
             const transactions = await this.transactionRepository
                 .findPaginate({}, offset, page, limit)
