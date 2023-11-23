@@ -21,7 +21,7 @@ let TransactionController = class TransactionController {
     constructor(_transactionService) {
         this._transactionService = _transactionService;
     }
-    async getAllactivity(page, limit, offset) {
+    async getAllTransaction(page, limit, offset) {
         const response = await this._transactionService.getTransactions(offset, page, limit);
         return response;
     }
@@ -43,12 +43,12 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number, Number]),
     __metadata("design:returntype", Promise)
-], TransactionController.prototype, "getAllactivity", null);
+], TransactionController.prototype, "getAllTransaction", null);
 __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys', type: transaction_response_dto_1.TransactionResponseDTO }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     (0, common_1.Get)('/get-one-transaction/:hash'),
-    __param(0, (0, common_1.Query)("hash")),
+    __param(0, (0, common_1.Param)("hash")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

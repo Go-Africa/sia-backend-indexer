@@ -28,7 +28,7 @@ import { TransactionService } from '../../services/transaction/transaction.servi
 export declare class TransactionController {
     private _transactionService;
     constructor(_transactionService: TransactionService);
-    getAllactivity(page?: number, limit?: number, offset?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
+    getAllTransaction(page?: number, limit?: number, offset?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         customLabels: {
             docs: string;
             page: string;

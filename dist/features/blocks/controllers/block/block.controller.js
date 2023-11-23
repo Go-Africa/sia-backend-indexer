@@ -21,7 +21,7 @@ let BlockController = class BlockController {
     constructor(_blockService) {
         this._blockService = _blockService;
     }
-    async getAllactivity(page, limit, offset) {
+    async getAllBlock(page, limit, offset) {
         const response = await this._blockService.getBlocks(offset, page, limit);
         return response;
     }
@@ -43,7 +43,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number, Number]),
     __metadata("design:returntype", Promise)
-], BlockController.prototype, "getAllactivity", null);
+], BlockController.prototype, "getAllBlock", null);
 __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys', type: block_response_dto_1.BlockResponseDTO }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),

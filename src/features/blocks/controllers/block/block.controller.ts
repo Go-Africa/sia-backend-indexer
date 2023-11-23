@@ -18,7 +18,7 @@ export class BlockController {
     @ApiQuery({ name: 'limit', required: false })
     @ApiQuery({ name: 'offset', required: false })
     @Get('/get-all-blocks')
-    async getAllactivity(
+    async getAllBlock(
         @Query('page') page?: number,
         @Query('limit') limit?: number,
         @Query('offset') offset?: number

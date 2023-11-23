@@ -28,7 +28,7 @@ import { BlockService } from '../../services/block/block.service';
 export declare class BlockController {
     private _blockService;
     constructor(_blockService: BlockService);
-    getAllactivity(page?: number, limit?: number, offset?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
+    getAllBlock(page?: number, limit?: number, offset?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         customLabels: {
             docs: string;
             page: string;

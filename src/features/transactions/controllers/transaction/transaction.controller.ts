@@ -16,7 +16,7 @@ export class TransactionController {
     @ApiQuery({ name: 'limit', required: false })
     @ApiQuery({ name: 'offset', required: false })
     @Get('/get-all-transactions')
-    async getAllactivity(
+    async getAllTransaction(
         @Query('page') page?: number,
         @Query('limit') limit?: number,
         @Query('offset') offset?: number
@@ -28,7 +28,7 @@ export class TransactionController {
     @ApiResponse({ status: 200, description: 'Successfully get all activitys', type: TransactionResponseDTO})
     @ApiResponse({ status: 400, description: 'Bad request' })
     @Get('/get-one-transaction/:hash')
-    async getOneTransaction(@Query("hash") hash: string){
+    async getOneTransaction(@Param("hash") hash: string){
         const response = await this._transactionService.getOneTransaction(hash);
         return response;
     }
