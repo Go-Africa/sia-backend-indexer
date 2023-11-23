@@ -35,11 +35,13 @@ export class BlockService  {
     baseUrl = process.env.RENTERD_BASE_URL;
 
     async getBlocks(page?: number, limit?: number) {
+        if(page < 1){
+            throw new HttpException("la page dois etre supérieur à 0.", HttpStatus.BAD_REQUEST);
+        }
         try {
-            const offset = (page - 1) * limit;
             // Exécutez la requête avec pagination et tri
             const blocks = await this.blockRepository
-                .findPaginate({}, offset, page, limit)
+                .findPaginate({}, page, limit)
             // log("result", blocks)
             return blocks;
         } catch (error) {

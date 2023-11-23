@@ -34,7 +34,13 @@ export declare class BlockService {
     private readonly transactionRepository;
     constructor(httpService: HttpService, blockRepository: BlocksRepository, transactionRepository: TransactionsRepository);
     baseUrl: string;
-    getBlocks(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, import("mongoose").PaginateOptions, Block> & Block & Required<{
+    getBlocks(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
+        page: number;
+        limit: number;
+        sort: {
+            timestamp: number;
+        };
+    }, Block> & Block & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>>>;
     private currentBlockHeigh;

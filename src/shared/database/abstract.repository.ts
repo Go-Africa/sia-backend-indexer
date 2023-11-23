@@ -75,13 +75,8 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return this.model.find(filterQuery, {}, { lean: true });
   }
 
-  async findPaginate(filterQuery: FilterQuery<TDocument>, offset: number, page: number, limit: number) {
-    console.log('Offset:', offset);
-    console.log('Page:', page);
-    console.log('Limit:', limit);
-
-    return await this.model.paginate(filterQuery, { offset: offset, page: page, limit: limit});
-    // return await this.model.paginate(filterQuery, { offset, limit, page, sort: { timestamp: -1 } });
+  async findPaginate(filterQuery: FilterQuery<TDocument>, page: number = 1, limit: number = 10) {
+    return await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 }});
   }
 
   async startTransaction() {

@@ -21,16 +21,18 @@ let TransactionService = class TransactionService {
         this.baseUrl = process.env.RENTERD_BASE_URL;
     }
     async getTransactions(page, limit) {
+        if (page < 1) {
+            throw new common_1.HttpException("la page dois etre supérieur à 0.", common_1.HttpStatus.BAD_REQUEST);
+        }
         try {
-            const offset = (page - 1) * limit;
             const transactions = await this.transactionRepository
-                .findPaginate({}, offset, page, limit);
+                .findPaginate({}, page, limit);
             (0, console_1.log)("result", transactions);
             return transactions;
         }
         catch (error) {
             console.error('Erreur lors de la récupération des transactions :', error);
-            throw new Error('Erreur lors de la récupération des transactions.');
+            throw new common_1.HttpException("Erreur lors de la récupération des transactions.", common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async getOneTransaction(id) {

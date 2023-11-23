@@ -13,17 +13,19 @@ export class TransactionService {
     baseUrl = process.env.RENTERD_BASE_URL;
 
     async getTransactions(page: number, limit: number) {
+        if(page < 1){
+            throw new HttpException("la page dois etre supérieur à 0.", HttpStatus.BAD_REQUEST);
+        }
         try {
-            const offset = (page - 1) * limit;
             // Exécutez la requête avec pagination et tri
             const transactions = await this.transactionRepository
-                .findPaginate({}, offset, page, limit)
+                .findPaginate({}, page, limit)
             log("result", transactions)
             return transactions;
         } catch (error) {
             // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception
             console.error('Erreur lors de la récupération des transactions :', error);
-            throw new Error('Erreur lors de la récupération des transactions.');
+            throw new HttpException("Erreur lors de la récupération des transactions.", HttpStatus.BAD_REQUEST);
         }
     }
 

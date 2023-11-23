@@ -41,11 +41,8 @@ class AbstractRepository {
     async find(filterQuery) {
         return this.model.find(filterQuery, {}, { lean: true });
     }
-    async findPaginate(filterQuery, offset, page, limit) {
-        console.log('Offset:', offset);
-        console.log('Page:', page);
-        console.log('Limit:', limit);
-        return await this.model.paginate(filterQuery, { offset: offset, page: page, limit: limit });
+    async findPaginate(filterQuery, page = 1, limit = 10) {
+        return await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 } });
     }
     async startTransaction() {
         const session = await this.connection.startSession();

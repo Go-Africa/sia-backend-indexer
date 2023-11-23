@@ -35,10 +35,12 @@ let BlockService = BlockService_1 = class BlockService {
         this.getHeight();
     }
     async getBlocks(page, limit) {
+        if (page < 1) {
+            throw new common_1.HttpException("la page dois etre supérieur à 0.", common_1.HttpStatus.BAD_REQUEST);
+        }
         try {
-            const offset = (page - 1) * limit;
             const blocks = await this.blockRepository
-                .findPaginate({}, offset, page, limit);
+                .findPaginate({}, page, limit);
             return blocks;
         }
         catch (error) {
