@@ -47,8 +47,6 @@ export declare class BlockService {
     private previousBlock;
     private readonly logger;
     getHeight(): Promise<void>;
-    getNextBlock(): Promise<void>;
-    getPreviousBlock(): Promise<void>;
     getBlock(height: string): Promise<boolean>;
     getOneBlock(height: string): Promise<Block>;
 }

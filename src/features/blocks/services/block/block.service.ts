@@ -23,7 +23,7 @@ import { log } from 'console';
 import { BlockResponseDTO } from '../../dtos/block-response.dto';
 
 @Injectable()
-export class BlockService  {
+export class BlockService {
 
     constructor(
         private httpService: HttpService,
@@ -35,7 +35,7 @@ export class BlockService  {
     baseUrl = process.env.RENTERD_BASE_URL;
 
     async getBlocks(page?: number, limit?: number) {
-        if(page < 1){
+        if (page < 1) {
             throw new HttpException("la page dois etre supérieur à 0.", HttpStatus.BAD_REQUEST);
         }
         try {
@@ -59,10 +59,11 @@ export class BlockService  {
     async getHeight() {
         const url = `${this.baseUrl}/consensus`;
         const headers = { 'User-Agent': 'Sia-Agent' };
-
+    
         try {
             this.logger.log("Checking consensus data");
-
+    
+            // Fetch consensus data from the specified URL
             const response = await lastValueFrom(
                 this.httpService.get(url, {
                     headers,
@@ -71,137 +72,114 @@ export class BlockService  {
                     map(resp => resp.data),
                 ),
             );
+    
+            // Check if the response contains the height property
             if (response.height) {
+                // Set initial block height values
                 this.currentBlockHeigh = response.height;
                 this.previousBlock = response.height;
-                const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
-                await this.getNextBlock();
-                await sleep(30000);
-                await this.getPreviousBlock();
-
-                // this.logger.log("Result", response);
+                console.log(response.height);
+    
+                // Define a function to get the previous block asynchronously
+                const getPreviousBlock = async () => {
+                    while (this.previousBlock >= 0) {
+                        this.logger.log("Getting previous block at " + this.previousBlock);
+                        const result = await this.getBlock(this.previousBlock.toString());
+                        this.previousBlock--;
+                    }
+                };
+    
+                // Define a function to get the next block asynchronously
+                const getNextBlock = async () => {
+                    while (true) {
+                        this.logger.log("Getting next block at " + this.currentBlockHeigh);
+                        const result = await this.getBlock(this.currentBlockHeigh.toString());
+                        this.currentBlockHeigh++;
+                    }
+                };
+    
+                // Execute getPreviousBlock and getNextBlock concurrently
+                await Promise.all([getPreviousBlock(), getNextBlock()]);
             }
-
         } catch (error) {
+            // Handle errors that may occur during the process
             this.logger.error("Error fetching consensus data", error);
         }
     }
-
-    @Cron("*/1 * * * * *")
-    async getNextBlock() {
-        this.logger.log("Getting previous block at " + this.previousBlock)
-        if (this.previousBlock <= 0) {
-            return;
-        }
-        const result = await this.getBlock(this.previousBlock.toString());
-        if (result) {
-            this.previousBlock--;
-        }
-    }
-
-    @Cron("*/1 * * * * *")
-    async getPreviousBlock() {
-        this.logger.log("Getting next block at " + this.currentBlockHeigh)
-        const result = await this.getBlock(this.currentBlockHeigh.toString());
-        if (result) {
-            this.currentBlockHeigh++;
-        }
-    }
+    
 
     async getBlock(height: string): Promise<boolean> {
-        // get block from database
-        const blockOfBD = await this.blockRepository.findOne({
-            height: height
-        }).catch((e: NotFoundException) => {
-            log(e.message);
-        })
-        
-        // log("block get", blockOfBD)
-        // check if already exists 
-        if (!blockOfBD) {
-            const url = `${this.baseUrl}/consensus/blocks?height=${height}`;
-            const headers = { 'User-Agent': 'Sia-Agent' };
-            var result = new BlockGetDTO();
-            try {
-                result = await lastValueFrom(
-                    this.httpService.get(url, {
-                        headers,
-                        httpsAgent: new https.Agent({ rejectUnauthorized: false })
-                    }).pipe(
-                        map(resp => resp.data)
-                    )
-                );
-            } catch (fetchError) {
-                this.logger.error("Error fetching block data: " + fetchError.message);
-                // Handle the error as needed for block data fetching
-                return;
-            }
+        const url = `${this.baseUrl}/consensus/blocks?height=${height}`;
+        const headers = { 'User-Agent': 'Sia-Agent' };
+    
+        try {
+            const result = await lastValueFrom(
+                this.httpService.get(url, {
+                    headers,
+                    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                }).pipe(
+                    map(resp => resp.data)
+                )
+            );
+    
             const blockMapper = new BaseMapper<BlockGetDTO, Block>(BlockGetDTO, Block);
             const savedBlock = blockMapper.toEntity(result);
-
-
-            this.logger.log("adding new block... at " + height);
-            const transactionIds = [];
-
+    
             const transactionMapper = new BaseMapper<TransactionDTO, Transaction>(TransactionDTO, Transaction);
             const transactionsGet = result.transactions;
-
-            for (let index = 0; index < transactionsGet.length; index++) {
-                const transaction = transactionsGet[index];
+    
+            // Use Promise.all to create transactions concurrently
+            const transactionPromises = transactionsGet.map(async transaction => {
                 const toSaveTransaction = transactionMapper.toEntity(transaction);
-                // this.logger.log("adding new transaction...");
-
-                const transactionOfBD = await this.transactionRepository.findOne({
-                    id: transaction.id
-                }).catch((e: NotFoundException) => {
-                    log(e.message)
-                });
-                // log("transactionOfBD get", toSaveTransaction);
-
-                if (!transactionOfBD) {
-                    toSaveTransaction.height = result.height;
-                    toSaveTransaction.timestamp = result.timestamp;
-                    toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
-                    const savedTransaction = this.transactionRepository.create(toSaveTransaction)
-                        .then(result => {
-                            // this.logger.log("added transaction ", result.id);
-                            transactionIds.push(result.id);
-                        })
-                        .catch(err => {
-                            this.logger.error(typeof(err), err.message);
-                            // return false;
-                        });
-                    // this.logger.log("new transaction added to database", savedTransaction);
-                }
-            }
-            // add transactionIds to the saved block
-            savedBlock.transactionId = transactionIds;
-            const newBlock = this.blockRepository.create(savedBlock)
-                .then(result => {
-                    
-                    this.logger.log("added block ", result.id);
-                    return true;
-                })
-                .catch(error => {
-                    this.logger.error(typeof(error), error.message);
-                    if(error.message.startsWith("E11000 duplicate key error collection:")){
-                        this.logger.log("transaction " + result.id + " already added");
-                        return true;
+                toSaveTransaction.height = result.height;
+                toSaveTransaction.timestamp = result.timestamp;
+                toSaveTransaction.siacoinoutputs = transaction.siacoinoutputs;
+    
+                try {
+                    const savedTransaction = await this.transactionRepository.create(toSaveTransaction);
+                    // this.logger.log("Added transaction ", savedTransaction.id);
+                    return savedTransaction.id;
+                } catch (error) {
+                    this.logger.error(typeof (error), error.message);
+                    if (error.message.startsWith("E11000 duplicate key error collection:")) {
+                        this.logger.log("Transaction " + transaction.id + " already added");
                     }
-                    return false;
-                });
-        } else {
-            this.logger.log("block " + height + " already added");
-            return true;
-        }
+                    return null;
+                }
+            });
+    
+            // Wait for all transactions to be created
+            const transactionIds = await Promise.all(transactionPromises);
+    
+            // Remove null values from transactionIds (failed creations due to duplicate key errors)
+            savedBlock.transactionId = transactionIds.filter(id => id !== null);
+    
+            // Use async/await for block creation
+            try {
+                const newBlock = await this.blockRepository.create(savedBlock);
+                this.logger.log("Added block at height", newBlock.height);
+                return true;
+            } catch (error) {
+                this.logger.error(typeof (error), error.message);
+                if (error.message.startsWith("E11000 duplicate key error collection:")) {
+                    this.logger.log("Block " + result.id + " already added");
+                }
+                return false;
+            }
+        } catch (fetchError) {
+            this.logger.error("Error fetching block data: " + fetchError.message);
+            // Handle the error as needed for block data fetching
+            return false;
+        }   
     }
+    
 
     async getOneBlock(height: string) {
         // get block from database
         const blockOfBD = await this.blockRepository.findOne({
             height: height
         }).catch((e: NotFoundException) => {
-            log(e.message);
+            // log(e.message);
         })
 
         // log("block get", blockOfBD)
