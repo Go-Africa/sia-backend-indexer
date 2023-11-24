@@ -29,6 +29,7 @@ let BlockService = BlockService_1 = class BlockService {
         this.blockRepository = blockRepository;
         this.transactionRepository = transactionRepository;
         this.baseUrl = process.env.RENTERD_BASE_URL;
+        this.httpAgent = new https.Agent({ rejectUnauthorized: false });
         this.logger = new common_2.Logger(BlockService_1.name);
         this.getHeight();
     }
@@ -53,7 +54,7 @@ let BlockService = BlockService_1 = class BlockService {
             this.logger.log("Checking consensus data");
             const response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
                 headers,
-                httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+                httpsAgent: this.httpAgent,
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
             if (response.height) {
                 this.currentBlockHeigh = response.height;
@@ -86,7 +87,7 @@ let BlockService = BlockService_1 = class BlockService {
         try {
             const result = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
                 headers,
-                httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                httpsAgent: this.httpAgent,
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
             const blockMapper = new base_mapper_1.BaseMapper(block_get_dto_1.BlockGetDTO, block_shema_1.Block);
             const savedBlock = blockMapper.toEntity(result);

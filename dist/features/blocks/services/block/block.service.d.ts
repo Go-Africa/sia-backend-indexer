@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -25,6 +26,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 /// <reference types="mongoose-paginate-v2" />
 import { HttpService } from '@nestjs/axios';
+import * as https from 'https';
 import { BlocksRepository } from '../../repositories/block.repository';
 import { TransactionsRepository } from 'src/features/transactions/repositories/transaction.recovery';
 import { Block } from '../../schemas/block.shema';
@@ -34,6 +36,7 @@ export declare class BlockService {
     private readonly transactionRepository;
     constructor(httpService: HttpService, blockRepository: BlocksRepository, transactionRepository: TransactionsRepository);
     baseUrl: string;
+    httpAgent: https.Agent;
     getBlocks(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         page: number;
         limit: number;

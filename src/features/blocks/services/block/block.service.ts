@@ -33,6 +33,7 @@ export class BlockService {
         this.getHeight()
     }
     baseUrl = process.env.RENTERD_BASE_URL;
+    httpAgent = new https.Agent({ rejectUnauthorized: false });
 
     async getBlocks(page?: number, limit?: number) {
         if (page < 1) {
@@ -67,7 +68,7 @@ export class BlockService {
             const response = await lastValueFrom(
                 this.httpService.get(url, {
                     headers,
-                    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+                    httpsAgent: this.httpAgent,
                 }).pipe(
                     map(resp => resp.data),
                 ),
@@ -116,7 +117,7 @@ export class BlockService {
             const result = await lastValueFrom(
                 this.httpService.get(url, {
                     headers,
-                    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+                    httpsAgent: this.httpAgent,
                 }).pipe(
                     map(resp => resp.data)
                 )
