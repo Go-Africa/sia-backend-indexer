@@ -44,20 +44,26 @@ let SharedService = SharedService_1 = class SharedService {
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
             if (response.height) {
                 this.currentBlockHeigh = response.height;
-                this.previousBlock = response.height;
+                this.previousBlock = response.height - 1;
                 console.log(response.height);
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                         this.logger.log("Getting previous block at " + this.previousBlock);
                         const result = await this.getBlock(this.previousBlock.toString());
-                        this.previousBlock--;
+                        if (result) {
+                            this.previousBlock--;
+                        }
                     }
                 };
                 const getNextBlock = async () => {
                     while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                         this.logger.log("Getting next block at " + this.currentBlockHeigh);
                         const result = await this.getBlock(this.currentBlockHeigh.toString());
-                        this.currentBlockHeigh++;
+                        if (result) {
+                            this.currentBlockHeigh++;
+                        }
                     }
                 };
                 await Promise.all([getPreviousBlock(), getNextBlock()]);
@@ -107,6 +113,7 @@ let SharedService = SharedService_1 = class SharedService {
                 this.logger.error(typeof (error), error.message);
                 if (error.message.startsWith("E11000 duplicate key error collection:")) {
                     this.logger.log("Block " + result.id + " already added");
+                    return true;
                 }
                 return false;
             }

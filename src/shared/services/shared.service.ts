@@ -49,24 +49,30 @@ export class SharedService {
             if (response.height) {
                 // Set initial block height values
                 this.currentBlockHeigh = response.height;
-                this.previousBlock = response.height;
+                this.previousBlock = response.height-1;
                 console.log(response.height);
     
                 // Define a function to get the previous block asynchronously
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                         this.logger.log("Getting previous block at " + this.previousBlock);
                         const result = await this.getBlock(this.previousBlock.toString());
-                        this.previousBlock--;
+                        if (result) {
+                            this.previousBlock--;
+                        }
                     }
                 };
     
                 // Define a function to get the next block asynchronously
                 const getNextBlock = async () => {
                     while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                         this.logger.log("Getting next block at " + this.currentBlockHeigh);
                         const result = await this.getBlock(this.currentBlockHeigh.toString());
-                        this.currentBlockHeigh++;
+                        if (result) {
+                            this.currentBlockHeigh++;
+                        }
                     }
                 };
     
@@ -135,6 +141,7 @@ export class SharedService {
                 this.logger.error(typeof (error), error.message);
                 if (error.message.startsWith("E11000 duplicate key error collection:")) {
                     this.logger.log("Block " + result.id + " already added");
+                    return true;
                 }
                 return false;
             }
