@@ -25,31 +25,22 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 /// <reference types="mongoose-paginate-v2" />
-import { HttpService } from '@nestjs/axios';
 import * as https from 'https';
 import { BlocksRepository } from '../../repositories/block.repository';
-import { TransactionsRepository } from 'src/features/transactions/repositories/transaction.recovery';
-import { Block } from '../../schemas/block.shema';
 export declare class BlockService {
-    private httpService;
     private readonly blockRepository;
-    private readonly transactionRepository;
-    constructor(httpService: HttpService, blockRepository: BlocksRepository, transactionRepository: TransactionsRepository);
+    constructor(blockRepository: BlocksRepository);
     baseUrl: string;
     httpAgent: https.Agent;
+    private readonly logger;
     getBlocks(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         page: number;
         limit: number;
         sort: {
             timestamp: number;
         };
-    }, Block> & Block & Required<{
+    }, import("../../schemas/block.shema").Block> & import("../../schemas/block.shema").Block & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>>>;
-    private currentBlockHeigh;
-    private previousBlock;
-    private readonly logger;
-    getHeight(): Promise<void>;
-    getBlock(height: string): Promise<boolean>;
-    getOneBlock(height: string): Promise<Block>;
+    getOneBlock(height: string): Promise<import("../../schemas/block.shema").Block>;
 }

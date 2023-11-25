@@ -11,6 +11,9 @@ const common_1 = require("@nestjs/common");
 const database_module_1 = require("./database/database.module");
 const interceptor_module_1 = require("./interceptors/interceptor.module");
 const axios_1 = require("@nestjs/axios");
+const shared_service_1 = require("./services/shared.service");
+const block_repository_1 = require("../features/blocks/repositories/block.repository");
+const transaction_recovery_1 = require("../features/transactions/repositories/transaction.recovery");
 let SharedModule = class SharedModule {
 };
 SharedModule = __decorate([
@@ -23,6 +26,11 @@ SharedModule = __decorate([
         exports: [
             database_module_1.DatabaseModule,
             axios_1.HttpModule
+        ],
+        providers: [
+            shared_service_1.SharedService,
+            block_repository_1.BlocksRepository,
+            transaction_recovery_1.TransactionsRepository,
         ]
     })
 ], SharedModule);

@@ -10,10 +10,6 @@ exports.BlocksModule = void 0;
 const common_1 = require("@nestjs/common");
 const block_service_1 = require("./services/block/block.service");
 const block_controller_1 = require("./controllers/block/block.controller");
-const coveredfield_repository_1 = require("../transactions/repositories/coveredfield.repository");
-const siacoinoutput_recovery_1 = require("../transactions/repositories/siacoinoutput.recovery");
-const transaction_signature_recovery_1 = require("../transactions/repositories/transaction-signature.recovery");
-const transaction_recovery_1 = require("../transactions/repositories/transaction.recovery");
 const block_repository_1 = require("./repositories/block.repository");
 const shared_module_1 = require("../../shared/shared.module");
 const schedule_1 = require("@nestjs/schedule");
@@ -28,10 +24,6 @@ BlocksModule = __decorate([
         providers: [
             block_service_1.BlockService,
             block_repository_1.BlocksRepository,
-            coveredfield_repository_1.CoveredFieldsRepository,
-            siacoinoutput_recovery_1.SiacoinOutputsRepository,
-            transaction_signature_recovery_1.TransactionSignaturesRepository,
-            transaction_recovery_1.TransactionsRepository,
         ],
         controllers: [block_controller_1.BlockController]
     })

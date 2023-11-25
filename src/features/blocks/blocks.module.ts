@@ -19,10 +19,6 @@ import { ScheduleModule } from '@nestjs/schedule';
   providers: [
     BlockService,
     BlocksRepository,
-    CoveredFieldsRepository,
-    SiacoinOutputsRepository,
-    TransactionSignaturesRepository,
-    TransactionsRepository,
   ],
   controllers: [BlockController]
 })
