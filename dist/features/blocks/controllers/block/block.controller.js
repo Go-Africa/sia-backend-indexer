@@ -31,7 +31,7 @@ let BlockController = class BlockController {
     }
 };
 __decorate([
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys', type: block_response_dto_1.BlockResponseDTO }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all activitys' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AbstractRepository = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
+const console_1 = require("console");
 class AbstractRepository {
     constructor(model, connection) {
         this.model = model;
@@ -38,11 +39,27 @@ class AbstractRepository {
             new: true,
         });
     }
-    async find(filterQuery) {
-        return this.model.find(filterQuery, {}, { lean: true });
-    }
     async findPaginate(filterQuery, page = 1, limit = 10) {
-        return await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 } });
+        const skip = (page - 1) * limit;
+        try {
+            const result = await this.model.find(filterQuery, {}, { sort: { timestamp: -1 } })
+                .limit(limit)
+                .skip(skip);
+            const totalPages = Math.ceil(100000 / limit);
+            const paginatedResult = {
+                docs: result,
+                totalDocs: 100000,
+                limit,
+                page,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1,
+            };
+            return paginatedResult;
+        }
+        catch (error) {
+            (0, console_1.log)(error.message);
+        }
     }
     async startTransaction() {
         const session = await this.connection.startSession();

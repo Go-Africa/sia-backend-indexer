@@ -20,7 +20,6 @@ export class TransactionService {
             // Exécutez la requête avec pagination et tri
             const transactions = await this.transactionRepository
                 .findPaginate({}, page, limit)
-            log("result", transactions)
             return transactions;
         } catch (error) {
             // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception

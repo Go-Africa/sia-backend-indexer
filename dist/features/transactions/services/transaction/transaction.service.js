@@ -27,7 +27,6 @@ let TransactionService = class TransactionService {
         try {
             const transactions = await this.transactionRepository
                 .findPaginate({}, page, limit);
-            (0, console_1.log)("result", transactions);
             return transactions;
         }
         catch (error) {

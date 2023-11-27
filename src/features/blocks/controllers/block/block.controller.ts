@@ -12,7 +12,7 @@ export class BlockController {
         private _blockService: BlockService
     ) { }
 
-    @ApiResponse({ status: 200, description: 'Successfully get all activitys', type: BlockResponseDTO})
+    @ApiResponse({ status: 200, description: 'Successfully get all activitys'})
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiQuery({ name: 'page', required: false })
     @ApiQuery({ name: 'limit', required: false })

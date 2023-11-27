@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import * as https from 'https'
 import { BlocksRepository } from '../../repositories/block.repository';
 import { TransactionsRepository } from 'src/features/transactions/repositories/transaction.recovery';
+import { log } from 'console';
 
 // import * as nacl from 'tweetnacl';
 // import * as util from 'tweetnacl-util';
@@ -27,7 +28,6 @@ export class BlockService {
             // Exécutez la requête avec pagination et tri
             const blocks = await this.blockRepository
                 .findPaginate({}, page, limit)
-            // log("result", blocks)
             return blocks;
         } catch (error) {
             // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception

@@ -19,7 +19,7 @@ export class SharedService {
         private readonly blockRepository: BlocksRepository,
         private readonly transactionRepository: TransactionsRepository,
     ) {
-        this.getHeight()
+        // this.getHeight()
     }
 
     baseUrl = process.env.RENTERD_BASE_URL;

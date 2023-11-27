@@ -31,7 +31,6 @@ let SharedService = SharedService_1 = class SharedService {
         this.baseUrl = process.env.RENTERD_BASE_URL;
         this.logger = new common_2.Logger(SharedService_1.name);
         this.httpAgent = new https.Agent({ rejectUnauthorized: false });
-        this.getHeight();
     }
     async getHeight() {
         const url = `${this.baseUrl}/consensus`;

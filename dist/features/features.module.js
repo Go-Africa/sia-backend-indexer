@@ -10,11 +10,13 @@ exports.FeaturesModule = void 0;
 const common_1 = require("@nestjs/common");
 const blocks_module_1 = require("./blocks/blocks.module");
 const transactions_module_1 = require("./transactions/transactions.module");
+const dashboard_module_1 = require("./dashboard/dashboard.module");
+const hosts_module_1 = require("./hosts/hosts.module");
 let FeaturesModule = class FeaturesModule {
 };
 FeaturesModule = __decorate([
     (0, common_1.Module)({
-        imports: [blocks_module_1.BlocksModule, transactions_module_1.TransactionsModule]
+        imports: [blocks_module_1.BlocksModule, transactions_module_1.TransactionsModule, dashboard_module_1.DashboardModule, hosts_module_1.HostsModule]
     })
 ], FeaturesModule);
 exports.FeaturesModule = FeaturesModule;

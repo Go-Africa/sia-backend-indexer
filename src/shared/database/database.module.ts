@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Block, BlockSchema } from 'src/features/blocks/schemas/block.shema';
 import { MinerPayout, MinerPayoutSchema } from 'src/features/blocks/schemas/miner-payout.schema';
+import { Host, HostSchema } from 'src/features/hosts/schemas/host.schema';
 import { CoveredField, CoveredFieldSchema } from 'src/features/transactions/schemas/coveredfields.schema';
 import { SiacoinOutput, SiacoinOutputSchema } from 'src/features/transactions/schemas/siacoinoutput.shema';
 import { TransactionSignature, TransactionSignatureSchema } from 'src/features/transactions/schemas/transaction-signature.schema';
@@ -19,17 +20,13 @@ import { Transaction, TransactionSchema } from 'src/features/transactions/schema
     MongooseModule.forFeature([{ name: Block.name, schema: BlockSchema }]),
     MongooseModule.forFeature([{ name: MinerPayout.name, schema: MinerPayoutSchema }]),
     MongooseModule.forFeature([{ name: Transaction.name, schema: TransactionSchema }]),
-    MongooseModule.forFeature([{ name: TransactionSignature.name, schema: TransactionSignatureSchema }]),
-    MongooseModule.forFeature([{ name: SiacoinOutput.name, schema: SiacoinOutputSchema }]),
-    MongooseModule.forFeature([{ name: CoveredField.name, schema: CoveredFieldSchema }]),
+    MongooseModule.forFeature([{ name: Host.name, schema: HostSchema }]),
   ],
   exports: [
     MongooseModule.forFeature([{ name: Block.name, schema: BlockSchema }]),
     MongooseModule.forFeature([{ name: MinerPayout.name, schema: MinerPayoutSchema }]),
     MongooseModule.forFeature([{ name: Transaction.name, schema: TransactionSchema }]),
-    MongooseModule.forFeature([{ name: TransactionSignature.name, schema: TransactionSignatureSchema }]),
-    MongooseModule.forFeature([{ name: SiacoinOutput.name, schema: SiacoinOutputSchema }]),
-    MongooseModule.forFeature([{ name: CoveredField.name, schema: CoveredFieldSchema }]),
+    MongooseModule.forFeature([{ name: Host.name, schema: HostSchema }]),
   ]
 })
 export class DatabaseModule {}
