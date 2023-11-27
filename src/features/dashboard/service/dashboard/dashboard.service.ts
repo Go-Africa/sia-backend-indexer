@@ -5,12 +5,14 @@ import * as https from 'https'
 import { lastValueFrom, map } from 'rxjs';
 import { SharedService } from 'src/shared/services/shared.service';
 import { LatestDataDTO } from '../../dtos/latest-data.dto';
+import { HostRepository } from 'src/features/hosts/repositories/host.repositort';
 
 @Injectable()
 export class DashboardService {
 
     constructor(
         private httpService: HttpService,
+        private readonly hostRepository: HostRepository,
     ) { }
 
     private readonly logger = new Logger(SharedService.name);
@@ -39,8 +41,8 @@ export class DashboardService {
                     map(resp => resp.data),
                 ),
             );
-            log(response.data["1024"])
-            const sia = response.data.filter(resp => resp.name == 'Siacoin')[0];
+            const host = await this.hostRepository.find({});
+            const sia = response.data["1042"]
             const latestData = new LatestDataDTO();
             latestData.circulating_supply = sia.circulating_supply;
             latestData.totat_supply = sia.totat_supply;
@@ -57,7 +59,9 @@ export class DashboardService {
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
             this.logger.log(sia);
-            return sia
+
+
+            return latestData   
         } catch (error) {
             log(error)
         }

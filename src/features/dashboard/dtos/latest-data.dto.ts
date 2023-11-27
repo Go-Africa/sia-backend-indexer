@@ -1,4 +1,8 @@
 export class LatestDataDTO {
+    total_hosts: number;
+    total_storage: number;
+    remaining_storage: number;
+    used_storage: number;
     circulating_supply: number;
     totat_supply: number;
     price: number;

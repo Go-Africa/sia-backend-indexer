@@ -72,9 +72,9 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     });
   }
 
-  // async find(filterQuery: FilterQuery<TDocument>, limit: number = 500) {
-  //   return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
-  // }
+  async find(filterQuery: FilterQuery<TDocument>) {
+    return this.model.find(filterQuery, {}, { lean: true });
+  }
 
   // async findPaginate(filterQuery: FilterQuery<TDocument>, page: number = 1, limit: number = 10, max: number = 25000) {
   //   return (await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 }}));

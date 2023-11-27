@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const dashboard_controller_1 = require("./controllers/dashboard/dashboard.controller");
 const dashboard_service_1 = require("./service/dashboard/dashboard.service");
 const shared_module_1 = require("../../shared/shared.module");
+const host_repositort_1 = require("../hosts/repositories/host.repositort");
 let DashboardModule = class DashboardModule {
 };
 DashboardModule = __decorate([
@@ -19,7 +20,10 @@ DashboardModule = __decorate([
             shared_module_1.SharedModule
         ],
         controllers: [dashboard_controller_1.DashboardController],
-        providers: [dashboard_service_1.DashboardService]
+        providers: [
+            dashboard_service_1.DashboardService,
+            host_repositort_1.HostRepository
+        ]
     })
 ], DashboardModule);
 exports.DashboardModule = DashboardModule;

@@ -39,6 +39,9 @@ class AbstractRepository {
             new: true,
         });
     }
+    async find(filterQuery) {
+        return this.model.find(filterQuery, {}, { lean: true });
+    }
     async findPaginate(filterQuery, page = 1, limit = 10) {
         const skip = (page - 1) * limit;
         try {

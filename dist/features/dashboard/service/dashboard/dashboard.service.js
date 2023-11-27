@@ -17,9 +17,11 @@ const https = require("https");
 const rxjs_1 = require("rxjs");
 const shared_service_1 = require("../../../../shared/services/shared.service");
 const latest_data_dto_1 = require("../../dtos/latest-data.dto");
+const host_repositort_1 = require("../../../hosts/repositories/host.repositort");
 let DashboardService = class DashboardService {
-    constructor(httpService) {
+    constructor(httpService, hostRepository) {
         this.httpService = httpService;
+        this.hostRepository = hostRepository;
         this.logger = new common_1.Logger(shared_service_1.SharedService.name);
         this.httpAgent = new https.Agent({ rejectUnauthorized: false });
         this.coinmarketcapURL = process.env.BASE_CMC_URL;
@@ -40,8 +42,8 @@ let DashboardService = class DashboardService {
                 params: queryParams,
                 httpsAgent: this.httpAgent,
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
-            (0, console_1.log)(response.data["1024"]);
-            const sia = response.data.filter(resp => resp.name == 'Siacoin')[0];
+            const host = await this.hostRepository.find({});
+            const sia = response.data["1042"];
             const latestData = new latest_data_dto_1.LatestDataDTO();
             latestData.circulating_supply = sia.circulating_supply;
             latestData.totat_supply = sia.totat_supply;
@@ -58,7 +60,7 @@ let DashboardService = class DashboardService {
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
             this.logger.log(sia);
-            return sia;
+            return latestData;
         }
         catch (error) {
             (0, console_1.log)(error);
@@ -87,7 +89,8 @@ let DashboardService = class DashboardService {
 };
 DashboardService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [axios_1.HttpService])
+    __metadata("design:paramtypes", [axios_1.HttpService,
+        host_repositort_1.HostRepository])
 ], DashboardService);
 exports.DashboardService = DashboardService;
 //# sourceMappingURL=dashboard.service.js.map
