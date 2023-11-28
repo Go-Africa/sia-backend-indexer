@@ -41,7 +41,7 @@ let SharedService = SharedService_1 = class SharedService {
             do {
                 try {
                     this.logger.verbose("Checking consensus data");
-                    await new Promise(resolve => setTimeout(resolve, 200));
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     this.response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
                         headers,
                         httpsAgent: this.httpAgent,
