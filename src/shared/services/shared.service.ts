@@ -40,7 +40,7 @@ export class SharedService {
             do {
                 try {
                     this.logger.verbose("Checking consensus data");
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await new Promise(resolve => setTimeout(resolve, 3000));
                     this.response = await lastValueFrom(
                         this.httpService.get(url, {
                             headers,
