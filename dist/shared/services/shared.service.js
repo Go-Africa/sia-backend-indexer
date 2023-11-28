@@ -31,20 +31,29 @@ let SharedService = SharedService_1 = class SharedService {
         this.baseUrl = process.env.RENTERD_BASE_URL;
         this.logger = new common_2.Logger(SharedService_1.name);
         this.httpAgent = new https.Agent({ rejectUnauthorized: false });
+        this.getHeight();
     }
     async getHeight() {
         const url = `${this.baseUrl}/consensus`;
         const headers = { 'User-Agent': 'Sia-Agent' };
         try {
             this.logger.log("Checking consensus data");
-            const response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
-                headers,
-                httpsAgent: this.httpAgent,
-            }).pipe((0, rxjs_1.map)(resp => resp.data)));
-            if (response.height) {
-                this.currentBlockHeigh = response.height;
+            do {
+                try {
+                    this.logger.verbose("Checking consensus data");
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    this.response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
+                        headers,
+                        httpsAgent: this.httpAgent,
+                    }).pipe((0, rxjs_1.map)(resp => resp.data)));
+                }
+                catch (error) {
+                }
+            } while (!this.response);
+            if (this.response.height) {
+                this.currentBlockHeigh = this.response.height;
                 this.previousBlock = 149950;
-                console.log(response.height);
+                console.log(this.response.height);
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
                         await new Promise(resolve => setTimeout(resolve, 1000));

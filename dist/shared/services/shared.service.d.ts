@@ -13,6 +13,7 @@ export declare class SharedService {
     httpAgent: https.Agent;
     private currentBlockHeigh;
     private previousBlock;
+    private response;
     getHeight(): Promise<void>;
     getBlock(height: string): Promise<boolean>;
 }

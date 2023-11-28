@@ -19,7 +19,7 @@ export class SharedService {
         private readonly blockRepository: BlocksRepository,
         private readonly transactionRepository: TransactionsRepository,
     ) {
-        // this.getHeight()
+        this.getHeight()
     }
 
     baseUrl = process.env.RENTERD_BASE_URL;
@@ -27,6 +27,7 @@ export class SharedService {
     httpAgent = new https.Agent({ rejectUnauthorized: false });
     private currentBlockHeigh: number;
     private previousBlock: number;
+    private response: any;
 
     async getHeight() {
         const url = `${this.baseUrl}/consensus`;
@@ -36,21 +37,30 @@ export class SharedService {
             this.logger.log("Checking consensus data");
     
             // Fetch consensus data from the specified URL
-            const response = await lastValueFrom(
-                this.httpService.get(url, {
-                    headers,
-                    httpsAgent: this.httpAgent,
-                }).pipe(
-                    map(resp => resp.data),
-                ),
-            );
-    
+            do {
+                try {
+                    this.logger.verbose("Checking consensus data");
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    this.response = await lastValueFrom(
+                        this.httpService.get(url, {
+                            headers,
+                            httpsAgent: this.httpAgent,
+                        }).pipe(
+                            map(resp => resp.data),
+                        ),
+                    ); 
+                } catch (error) {
+                    
+                }
+                
+            } while (!this.response) 
+            
             // Check if the response contains the height property
-            if (response.height) {
+            if (this.response.height) {
                 // Set initial block height values
-                this.currentBlockHeigh = response.height;
+                this.currentBlockHeigh = this.response.height;
                 this.previousBlock = 149950;
-                console.log(response.height);
+                console.log(this.response.height);
     
                 // Define a function to get the previous block asynchronously
                 const getPreviousBlock = async () => {
