@@ -51,5 +51,5 @@ export declare class HostService {
         hasNextPage: boolean;
         hasPrevPage: boolean;
     }>;
-    getOneHost(height: string): Promise<Host>;
+    getOneHost(publicKey: string): Promise<Host>;
 }

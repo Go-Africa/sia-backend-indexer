@@ -24,21 +24,30 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 /// <reference types="mongoose-paginate-v2" />
-import { HostService } from '../../services/host/host.service';
-import { Host } from '../../schemas/host.schema';
-export declare class HostController {
-    private _dashService;
-    constructor(_dashService: HostService);
-    getAllHost(): Promise<{
-        docs: (import("mongoose").Document<unknown, {}, Host> & Host & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }>)[];
-        totalDocs: number;
-        limit: number;
-        page: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-    }>;
-    getOneHost(publicKey: string): Promise<Host>;
+import { AbstractDocument } from "src/shared/database/abstract.schema";
+export declare class LatestData extends AbstractDocument {
+    total_transaction: number;
+    total_hosts: number;
+    total_storage: number;
+    remaining_storage: number;
+    used_storage: number;
+    circulating_supply: number;
+    totat_supply: number;
+    price: number;
+    volume_24h: number;
+    volume_change_24h: number;
+    percent_change_1h: number;
+    percent_change_24h: number;
+    percent_change_7d: number;
+    percent_change_30d: number;
+    percent_change_60d: number;
+    percent_change_90d: number;
+    market_cap: number;
+    market_cap_dominance: number;
+    fully_diluted_market_cap: number;
 }
+export declare const LatestDataSchema: import("mongoose").Schema<LatestData, import("mongoose").Model<LatestData, any, any, any, import("mongoose").Document<unknown, any, LatestData> & LatestData & Required<{
+    _id: import("mongoose").Types.ObjectId;
+}>, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, LatestData, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<LatestData>> & import("mongoose").FlatRecord<LatestData> & Required<{
+    _id: import("mongoose").Types.ObjectId;
+}>>;

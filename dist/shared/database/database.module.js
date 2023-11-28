@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const block_shema_1 = require("../../features/blocks/schemas/block.shema");
 const miner_payout_schema_1 = require("../../features/blocks/schemas/miner-payout.schema");
+const latest_data_schema_1 = require("../../features/dashboard/schemas/latest-data.schema");
 const host_schema_1 = require("../../features/hosts/schemas/host.schema");
 const transaction_shema_1 = require("../../features/transactions/schemas/transaction.shema");
 let DatabaseModule = class DatabaseModule {
@@ -29,12 +30,14 @@ DatabaseModule = __decorate([
             mongoose_1.MongooseModule.forFeature([{ name: miner_payout_schema_1.MinerPayout.name, schema: miner_payout_schema_1.MinerPayoutSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: transaction_shema_1.Transaction.name, schema: transaction_shema_1.TransactionSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: host_schema_1.Host.name, schema: host_schema_1.HostSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: latest_data_schema_1.LatestData.name, schema: latest_data_schema_1.LatestDataSchema }]),
         ],
         exports: [
             mongoose_1.MongooseModule.forFeature([{ name: block_shema_1.Block.name, schema: block_shema_1.BlockSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: miner_payout_schema_1.MinerPayout.name, schema: miner_payout_schema_1.MinerPayoutSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: transaction_shema_1.Transaction.name, schema: transaction_shema_1.TransactionSchema }]),
             mongoose_1.MongooseModule.forFeature([{ name: host_schema_1.Host.name, schema: host_schema_1.HostSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: latest_data_schema_1.LatestData.name, schema: latest_data_schema_1.LatestDataSchema }]),
         ]
     })
 ], DatabaseModule);

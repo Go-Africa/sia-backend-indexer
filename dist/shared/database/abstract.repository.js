@@ -43,13 +43,15 @@ class AbstractRepository {
             new: true,
         });
     }
-    async find(filterQuery) {
+    async find(filterQuery, limit) {
+        if (limit)
+            return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
         return this.model.find(filterQuery, {}, { lean: true });
     }
     async findPaginate(filterQuery, page = 1, limit = 10) {
         const skip = (page - 1) * limit;
         try {
-            const result = await this.model.find(filterQuery, {}, { sort: { timestamp: -1 } })
+            const result = await this.model.find(filterQuery, {})
                 .limit(limit)
                 .skip(skip);
             const totalPages = Math.ceil(100000 / limit);

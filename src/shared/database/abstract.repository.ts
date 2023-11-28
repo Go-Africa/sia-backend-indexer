@@ -77,7 +77,9 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     });
   }
 
-  async find(filterQuery: FilterQuery<TDocument>) {
+  async find(filterQuery: FilterQuery<TDocument>, limit?: number) {
+    if(limit)
+      return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
     return this.model.find(filterQuery, {}, { lean: true });
   }
 
@@ -89,7 +91,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
     // Obtenez les documents paginés
     try {
-      const result = await this.model.find(filterQuery, {}, { sort: {timestamp: -1}})
+      const result = await this.model.find(filterQuery, {}, )
         .limit(limit)
         .skip(skip);
       // Calculez le nombre total de pages en fonction du nombre total de documents

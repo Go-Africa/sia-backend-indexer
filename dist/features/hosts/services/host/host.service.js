@@ -69,22 +69,21 @@ let HostService = HostService_1 = class HostService {
             throw new common_1.HttpException(error.message, common_1.HttpStatus.BAD_REQUEST);
         }
     }
-    async getOneHost(height) {
+    async getOneHost(publicKey) {
         const hostOfBD = await this.hostRepository.findOne({
-            height: height
+            publicKey: publicKey
         }).catch((e) => {
         });
         if (!hostOfBD) {
             throw new common_1.HttpException("This host doen't exist", common_1.HttpStatus.NOT_FOUND);
         }
         else {
-            this.logger.log("block " + height + " already added");
             return hostOfBD;
         }
     }
 };
 __decorate([
-    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_6_HOURS),
+    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_12_HOURS),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

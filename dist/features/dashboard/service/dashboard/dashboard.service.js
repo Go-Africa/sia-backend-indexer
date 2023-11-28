@@ -19,11 +19,14 @@ const shared_service_1 = require("../../../../shared/services/shared.service");
 const latest_data_dto_1 = require("../../dtos/latest-data.dto");
 const host_repositort_1 = require("../../../hosts/repositories/host.repositort");
 const transaction_recovery_1 = require("../../../transactions/repositories/transaction.recovery");
+const latest_data_repository_1 = require("../../repositories/latest-data.repository");
+const schedule_1 = require("@nestjs/schedule");
 let DashboardService = class DashboardService {
-    constructor(httpService, hostRepository, transactionRepository) {
+    constructor(httpService, hostRepository, transactionRepository, latestRepository) {
         this.httpService = httpService;
         this.hostRepository = hostRepository;
         this.transactionRepository = transactionRepository;
+        this.latestRepository = latestRepository;
         this.logger = new common_1.Logger(shared_service_1.SharedService.name);
         this.httpAgent = new https.Agent({ rejectUnauthorized: false });
         this.coinmarketcapURL = process.env.BASE_CMC_URL;
@@ -34,6 +37,17 @@ let DashboardService = class DashboardService {
         this.total_storage = 0;
         this.remaining_storage = 0;
         this.used_storage = 0;
+    }
+    async getLatestData() {
+        try {
+            const latestData = await this.latestRepository
+                .find({}, 1);
+            return latestData[0];
+        }
+        catch (error) {
+            console.error('Erreur:', error);
+            throw new common_1.HttpException(error.message, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getCMCData() {
         const url = `${this.coinmarketcapURL}/cryptocurrency/quotes/latest`;
@@ -54,7 +68,9 @@ let DashboardService = class DashboardService {
                 this.remaining_storage += host.settings.remainingstorage;
             }
             this.used_storage = this.total_storage - this.remaining_storage;
+            this.logger.verbose("init count");
             const total_transaction = await this.transactionRepository.countTotalDoc({});
+            this.logger.verbose("end count");
             const sia = response.data["1042"];
             const latestData = new latest_data_dto_1.LatestDataDTO();
             latestData.total_transaction = total_transaction;
@@ -75,38 +91,27 @@ let DashboardService = class DashboardService {
             latestData.market_cap_dominance = sia.quote.USD.market_cap_dominance;
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
+            await this.latestRepository.create(latestData);
+            this.logger.verbose("latest data created");
             return latestData;
         }
         catch (error) {
             (0, console_1.log)(error);
         }
     }
-    async getHost() {
-        const url = `${this.renterdURL}/api/bus/hosts`;
-        const headers = { 'Authorization': `Basic ${this.base64Credentials}` };
-        const queryParams = {
-            offset: 8000,
-            limit: 10,
-        };
-        try {
-            const response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
-                headers,
-                params: queryParams,
-                httpsAgent: this.httpAgent,
-            }).pipe((0, rxjs_1.map)(resp => resp.data)));
-            (0, console_1.log)(response);
-            return response;
-        }
-        catch (error) {
-            (0, console_1.log)(error);
-        }
-    }
 };
+__decorate([
+    (0, schedule_1.Cron)(schedule_1.CronExpression.EVERY_12_HOURS),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], DashboardService.prototype, "getCMCData", null);
 DashboardService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [axios_1.HttpService,
         host_repositort_1.HostRepository,
-        transaction_recovery_1.TransactionsRepository])
+        transaction_recovery_1.TransactionsRepository,
+        latest_data_repository_1.LatestDataRepository])
 ], DashboardService);
 exports.DashboardService = DashboardService;
 //# sourceMappingURL=dashboard.service.js.map

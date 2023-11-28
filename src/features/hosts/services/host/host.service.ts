@@ -25,7 +25,7 @@ export class HostService {
     renterdURL = process.env.RENTERD_URL;
     base64Credentials = Buffer.from(`${this.username}:${this.password}`).toString('base64');
 
-    @Cron(CronExpression.EVERY_6_HOURS)
+    @Cron(CronExpression.EVERY_12_HOURS)
     async getHostFromSiad(){
         const url = `${this.renterdURL}/api/bus/hosts`;
         const headers = { 'Authorization': `Basic ${this.base64Credentials}` };
@@ -74,10 +74,10 @@ export class HostService {
     }
 
 
-    async getOneHost(height: string) {
+    async getOneHost(publicKey: string) {
         // get block from database
         const hostOfBD = await this.hostRepository.findOne({
-            height: height
+            publicKey: publicKey
         }).catch((e: NotFoundException) => {
             // log(e.message);
         })
@@ -87,7 +87,6 @@ export class HostService {
         if (!hostOfBD) {
             throw new HttpException("This host doen't exist", HttpStatus.NOT_FOUND);
         } else {
-            this.logger.log("block " + height + " already added");
             return hostOfBD;
         }
 

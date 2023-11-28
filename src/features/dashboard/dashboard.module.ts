@@ -4,6 +4,7 @@ import { DashboardService } from './service/dashboard/dashboard.service';
 import { SharedModule } from 'src/shared/shared.module';
 import { HostRepository } from '../hosts/repositories/host.repositort';
 import { TransactionsRepository } from '../transactions/repositories/transaction.recovery';
+import { LatestDataRepository } from './repositories/latest-data.repository';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { TransactionsRepository } from '../transactions/repositories/transaction
   providers: [
     DashboardService,
     HostRepository,
-    TransactionsRepository
+    TransactionsRepository,
+    LatestDataRepository
   ]
 })
 export class DashboardModule {}

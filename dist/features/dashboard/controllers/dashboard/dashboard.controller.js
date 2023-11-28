@@ -19,11 +19,7 @@ let DashboardController = class DashboardController {
         this._dashService = _dashService;
     }
     async getAllBlock() {
-        const response = await this._dashService.getCMCData();
-        return response;
-    }
-    async getAllHost() {
-        const response = await this._dashService.getHost();
+        const response = await this._dashService.getLatestData();
         return response;
     }
 };
@@ -35,14 +31,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DashboardController.prototype, "getAllBlock", null);
-__decorate([
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all host' }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
-    (0, common_1.Get)('/get-all-host'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], DashboardController.prototype, "getAllHost", null);
 DashboardController = __decorate([
     (0, swagger_1.ApiTags)('dashboard'),
     (0, common_1.Controller)('dashboard'),

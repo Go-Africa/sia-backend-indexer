@@ -14,15 +14,7 @@ export class DashboardController {
     @ApiResponse({ status: 400, description: 'Bad request' })
     @Get('/get-latest-data')
     async getAllBlock() {
-        const response = await this._dashService.getCMCData();
-        return response;
-    }
-
-    @ApiResponse({ status: 200, description: 'Successfully get all host'})
-    @ApiResponse({ status: 400, description: 'Bad request' })
-    @Get('/get-all-host')
-    async getAllHost() {
-        const response = await this._dashService.getHost();
+        const response = await this._dashService.getLatestData();
         return response;
     }
 }

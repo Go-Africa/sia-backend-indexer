@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { log } from 'console';
 import * as https from 'https'
 import { lastValueFrom, map } from 'rxjs';
@@ -7,6 +7,8 @@ import { SharedService } from 'src/shared/services/shared.service';
 import { LatestDataDTO } from '../../dtos/latest-data.dto';
 import { HostRepository } from 'src/features/hosts/repositories/host.repositort';
 import { TransactionsRepository } from 'src/features/transactions/repositories/transaction.recovery';
+import { LatestDataRepository } from '../../repositories/latest-data.repository';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class DashboardService {
@@ -15,7 +17,10 @@ export class DashboardService {
         private httpService: HttpService,
         private readonly hostRepository: HostRepository,
         private readonly transactionRepository: TransactionsRepository,
-    ) { }
+        private readonly latestRepository: LatestDataRepository,
+    ) { 
+        // this.getCMCData();
+    }
 
     private readonly logger = new Logger(SharedService.name);
     httpAgent = new https.Agent({ rejectUnauthorized: false });
@@ -31,6 +36,20 @@ export class DashboardService {
     remaining_storage: number = 0;
     used_storage: number = 0;
 
+    async getLatestData(){
+        try {
+            // Exécutez la requête avec pagination et tri
+            const latestData = await this.latestRepository
+                .find({}, 1)
+            return latestData[0];
+        } catch (error) {
+            // Gérez les erreurs, par exemple, en enregistrant ou en lançant une nouvelle exception
+            console.error('Erreur:', error);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Cron(CronExpression.EVERY_12_HOURS)
     async getCMCData(){
         const url = `${this.coinmarketcapURL}/cryptocurrency/quotes/latest`;
         const headers = { 'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API };
@@ -54,7 +73,9 @@ export class DashboardService {
                 this.remaining_storage += host.settings.remainingstorage;
             }
             this.used_storage = this.total_storage - this.remaining_storage;
+            this.logger.verbose("init count");
             const total_transaction = await this.transactionRepository.countTotalDoc({})
+            this.logger.verbose("end count");
             const sia = response.data["1042"]
             const latestData = new LatestDataDTO();
             latestData.total_transaction = total_transaction;
@@ -75,32 +96,9 @@ export class DashboardService {
             latestData.market_cap_dominance = sia.quote.USD.market_cap_dominance;
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
+            await this.latestRepository.create(latestData);
+            this.logger.verbose("latest data created");
             return latestData   
-        } catch (error) {
-            log(error)
-        }
-    }
-
-
-    async getHost(){
-        const url = `${this.renterdURL}/api/bus/hosts`;
-        const headers = { 'Authorization': `Basic ${this.base64Credentials}` };
-        const queryParams = {
-            offset: 8000,
-            limit: 10,
-          };
-        try {
-            const response = await lastValueFrom(
-                this.httpService.get(url, {
-                    headers,
-                    params: queryParams,
-                    httpsAgent: this.httpAgent,
-                }).pipe(
-                    map(resp => resp.data),
-                ),
-            );
-            log(response)
-            return response
         } catch (error) {
             log(error)
         }

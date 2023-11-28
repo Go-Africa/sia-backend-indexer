@@ -13,13 +13,7 @@ export class SiacoinOutput extends AbstractDocument {
     @Prop()
     unlockhash: string;
   
-    constructor(dto?: SiacoinOutput) {
-      super();
-      if (dto) {
-        Object.assign(this, dto);
-        // Mettez à jour les propriétés spécifiques à cette classe ici
-      }
-    }
+ 
   }
   
 
