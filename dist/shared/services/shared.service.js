@@ -41,7 +41,7 @@ let SharedService = SharedService_1 = class SharedService {
             do {
                 try {
                     this.logger.verbose("Checking consensus data");
-                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     this.response = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, {
                         headers,
                         httpsAgent: this.httpAgent,
@@ -52,11 +52,11 @@ let SharedService = SharedService_1 = class SharedService {
             } while (!this.response);
             if (this.response.height) {
                 this.currentBlockHeigh = this.response.height;
-                this.previousBlock = 117394;
+                this.previousBlock = 117190;
                 console.log(this.response.height);
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
-                        await new Promise(resolve => setTimeout(resolve, 300));
+                        await new Promise(resolve => setTimeout(resolve, 500));
                         this.logger.log("Getting previous block at " + this.previousBlock);
                         const result = await this.getBlock(this.previousBlock.toString());
                         if (result) {

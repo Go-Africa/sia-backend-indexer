@@ -40,7 +40,7 @@ export class SharedService {
             do {
                 try {
                     this.logger.verbose("Checking consensus data");
-                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     this.response = await lastValueFrom(
                         this.httpService.get(url, {
                             headers,
@@ -59,13 +59,13 @@ export class SharedService {
             if (this.response.height) {
                 // Set initial block height values
                 this.currentBlockHeigh = this.response.height;
-                this.previousBlock = 117394;
+                this.previousBlock = 117190;
                 console.log(this.response.height);
     
                 // Define a function to get the previous block asynchronously
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
-                        await new Promise(resolve => setTimeout(resolve, 300));
+                        await new Promise(resolve => setTimeout(resolve, 500));
                         this.logger.log("Getting previous block at " + this.previousBlock);
                         const result = await this.getBlock(this.previousBlock.toString());
                         if (result) {
