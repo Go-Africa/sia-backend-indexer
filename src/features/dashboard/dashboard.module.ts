@@ -3,6 +3,7 @@ import { DashboardController } from './controllers/dashboard/dashboard.controlle
 import { DashboardService } from './service/dashboard/dashboard.service';
 import { SharedModule } from 'src/shared/shared.module';
 import { HostRepository } from '../hosts/repositories/host.repositort';
+import { TransactionsRepository } from '../transactions/repositories/transaction.recovery';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { HostRepository } from '../hosts/repositories/host.repositort';
   controllers: [DashboardController],
   providers: [
     DashboardService,
-    HostRepository
+    HostRepository,
+    TransactionsRepository
   ]
 })
 export class DashboardModule {}

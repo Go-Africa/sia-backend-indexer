@@ -1,4 +1,5 @@
 export class LatestDataDTO {
+    total_transaction: number;
     total_hosts: number;
     total_storage: number;
     remaining_storage: number;

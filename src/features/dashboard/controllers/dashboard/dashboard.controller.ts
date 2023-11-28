@@ -12,7 +12,7 @@ export class DashboardController {
 
     @ApiResponse({ status: 200, description: 'Successfully get all data', type: LatestDataDTO})
     @ApiResponse({ status: 400, description: 'Bad request' })
-    @Get('/get-all-data')
+    @Get('/get-latest-data')
     async getAllBlock() {
         const response = await this._dashService.getCMCData();
         return response;

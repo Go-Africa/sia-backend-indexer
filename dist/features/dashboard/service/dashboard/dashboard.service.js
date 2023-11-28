@@ -18,10 +18,12 @@ const rxjs_1 = require("rxjs");
 const shared_service_1 = require("../../../../shared/services/shared.service");
 const latest_data_dto_1 = require("../../dtos/latest-data.dto");
 const host_repositort_1 = require("../../../hosts/repositories/host.repositort");
+const transaction_recovery_1 = require("../../../transactions/repositories/transaction.recovery");
 let DashboardService = class DashboardService {
-    constructor(httpService, hostRepository) {
+    constructor(httpService, hostRepository, transactionRepository) {
         this.httpService = httpService;
         this.hostRepository = hostRepository;
+        this.transactionRepository = transactionRepository;
         this.logger = new common_1.Logger(shared_service_1.SharedService.name);
         this.httpAgent = new https.Agent({ rejectUnauthorized: false });
         this.coinmarketcapURL = process.env.BASE_CMC_URL;
@@ -29,6 +31,9 @@ let DashboardService = class DashboardService {
         this.password = process.env.RENTERD_PASSWORD;
         this.renterdURL = process.env.RENTERD_URL;
         this.base64Credentials = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+        this.total_storage = 0;
+        this.remaining_storage = 0;
+        this.used_storage = 0;
     }
     async getCMCData() {
         const url = `${this.coinmarketcapURL}/cryptocurrency/quotes/latest`;
@@ -42,9 +47,20 @@ let DashboardService = class DashboardService {
                 params: queryParams,
                 httpsAgent: this.httpAgent,
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
-            const host = await this.hostRepository.find({});
+            const hosts = await this.hostRepository.find({});
+            for (let index = 0; index < hosts.length; index++) {
+                const host = hosts[index];
+                this.total_storage += host.settings.totalstorage;
+                this.remaining_storage += host.settings.remainingstorage;
+            }
+            this.used_storage = this.total_storage - this.remaining_storage;
+            const total_transaction = await this.transactionRepository.countTotalDoc({});
             const sia = response.data["1042"];
             const latestData = new latest_data_dto_1.LatestDataDTO();
+            latestData.total_transaction = total_transaction;
+            latestData.remaining_storage = this.remaining_storage;
+            latestData.total_storage = this.total_storage;
+            latestData.used_storage = this.used_storage;
             latestData.circulating_supply = sia.circulating_supply;
             latestData.totat_supply = sia.totat_supply;
             latestData.price = sia.quote.USD.price;
@@ -59,7 +75,6 @@ let DashboardService = class DashboardService {
             latestData.market_cap_dominance = sia.quote.USD.market_cap_dominance;
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
-            this.logger.log(sia);
             return latestData;
         }
         catch (error) {
@@ -90,7 +105,8 @@ let DashboardService = class DashboardService {
 DashboardService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [axios_1.HttpService,
-        host_repositort_1.HostRepository])
+        host_repositort_1.HostRepository,
+        transaction_recovery_1.TransactionsRepository])
 ], DashboardService);
 exports.DashboardService = DashboardService;
 //# sourceMappingURL=dashboard.service.js.map

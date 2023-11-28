@@ -13,6 +13,10 @@ class AbstractRepository {
         const createdDocument = new this.model(Object.assign(Object.assign({}, document), { _id: new mongoose_1.Types.ObjectId() }));
         return (await createdDocument.save(options)).toJSON();
     }
+    async countTotalDoc(filterQuery) {
+        const totalDocs = await this.model.countDocuments(filterQuery);
+        return totalDocs;
+    }
     async findOne(filterQuery) {
         const document = await this.model.findOne(filterQuery, {}, { lean: true });
         if (!document) {

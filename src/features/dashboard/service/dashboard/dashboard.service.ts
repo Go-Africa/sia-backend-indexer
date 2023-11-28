@@ -6,6 +6,7 @@ import { lastValueFrom, map } from 'rxjs';
 import { SharedService } from 'src/shared/services/shared.service';
 import { LatestDataDTO } from '../../dtos/latest-data.dto';
 import { HostRepository } from 'src/features/hosts/repositories/host.repositort';
+import { TransactionsRepository } from 'src/features/transactions/repositories/transaction.recovery';
 
 @Injectable()
 export class DashboardService {
@@ -13,6 +14,7 @@ export class DashboardService {
     constructor(
         private httpService: HttpService,
         private readonly hostRepository: HostRepository,
+        private readonly transactionRepository: TransactionsRepository,
     ) { }
 
     private readonly logger = new Logger(SharedService.name);
@@ -24,6 +26,10 @@ export class DashboardService {
     password = process.env.RENTERD_PASSWORD;
     renterdURL = process.env.RENTERD_URL;
     base64Credentials = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+
+    total_storage: number = 0;
+    remaining_storage: number = 0;
+    used_storage: number = 0;
 
     async getCMCData(){
         const url = `${this.coinmarketcapURL}/cryptocurrency/quotes/latest`;
@@ -41,9 +47,20 @@ export class DashboardService {
                     map(resp => resp.data),
                 ),
             );
-            const host = await this.hostRepository.find({});
+            const hosts = await this.hostRepository.find({});
+            for (let index = 0; index < hosts.length; index++) {
+                const host = hosts[index];
+                this.total_storage += host.settings.totalstorage;
+                this.remaining_storage += host.settings.remainingstorage;
+            }
+            this.used_storage = this.total_storage - this.remaining_storage;
+            const total_transaction = await this.transactionRepository.countTotalDoc({})
             const sia = response.data["1042"]
             const latestData = new LatestDataDTO();
+            latestData.total_transaction = total_transaction;
+            latestData.remaining_storage = this.remaining_storage;
+            latestData.total_storage = this.total_storage;
+            latestData.used_storage = this.used_storage;
             latestData.circulating_supply = sia.circulating_supply;
             latestData.totat_supply = sia.totat_supply;
             latestData.price = sia.quote.USD.price;
@@ -58,9 +75,6 @@ export class DashboardService {
             latestData.market_cap_dominance = sia.quote.USD.market_cap_dominance;
             latestData.fully_diluted_market_cap = sia.quote.USD.fully_diluted_market_cap;
             latestData.market_cap = sia.quote.USD.market_cap;
-            this.logger.log(sia);
-
-
             return latestData   
         } catch (error) {
             log(error)

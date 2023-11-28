@@ -43,7 +43,7 @@ let SharedService = SharedService_1 = class SharedService {
             }).pipe((0, rxjs_1.map)(resp => resp.data)));
             if (response.height) {
                 this.currentBlockHeigh = response.height;
-                this.previousBlock = response.height - 1;
+                this.previousBlock = 149950;
                 console.log(response.height);
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
@@ -57,7 +57,7 @@ let SharedService = SharedService_1 = class SharedService {
                 };
                 const getNextBlock = async () => {
                     while (true) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await new Promise(resolve => setTimeout(resolve, 300000));
                         this.logger.log("Getting next block at " + this.currentBlockHeigh);
                         const result = await this.getBlock(this.currentBlockHeigh.toString());
                         if (result) {

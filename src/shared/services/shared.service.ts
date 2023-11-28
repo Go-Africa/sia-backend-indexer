@@ -49,7 +49,7 @@ export class SharedService {
             if (response.height) {
                 // Set initial block height values
                 this.currentBlockHeigh = response.height;
-                this.previousBlock = response.height-1;
+                this.previousBlock = 149950;
                 console.log(response.height);
     
                 // Define a function to get the previous block asynchronously
@@ -67,7 +67,7 @@ export class SharedService {
                 // Define a function to get the next block asynchronously
                 const getNextBlock = async () => {
                     while (true) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await new Promise(resolve => setTimeout(resolve, 300000));
                         this.logger.log("Getting next block at " + this.currentBlockHeigh);
                         const result = await this.getBlock(this.currentBlockHeigh.toString());
                         if (result) {

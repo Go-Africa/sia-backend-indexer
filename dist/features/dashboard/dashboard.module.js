@@ -12,6 +12,7 @@ const dashboard_controller_1 = require("./controllers/dashboard/dashboard.contro
 const dashboard_service_1 = require("./service/dashboard/dashboard.service");
 const shared_module_1 = require("../../shared/shared.module");
 const host_repositort_1 = require("../hosts/repositories/host.repositort");
+const transaction_recovery_1 = require("../transactions/repositories/transaction.recovery");
 let DashboardModule = class DashboardModule {
 };
 DashboardModule = __decorate([
@@ -22,7 +23,8 @@ DashboardModule = __decorate([
         controllers: [dashboard_controller_1.DashboardController],
         providers: [
             dashboard_service_1.DashboardService,
-            host_repositort_1.HostRepository
+            host_repositort_1.HostRepository,
+            transaction_recovery_1.TransactionsRepository
         ]
     })
 ], DashboardModule);

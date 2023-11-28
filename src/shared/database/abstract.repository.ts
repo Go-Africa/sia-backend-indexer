@@ -32,6 +32,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     ).toJSON() as unknown as TDocument;
   }
 
+  async countTotalDoc(filterQuery: FilterQuery<TDocument>){
+    const totalDocs = await this.model.countDocuments(filterQuery);
+    return totalDocs;
+  }
+
   async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true }) as TDocument;
 

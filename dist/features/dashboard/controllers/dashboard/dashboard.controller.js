@@ -30,7 +30,7 @@ let DashboardController = class DashboardController {
 __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all data', type: latest_data_dto_1.LatestDataDTO }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
-    (0, common_1.Get)('/get-all-data'),
+    (0, common_1.Get)('/get-latest-data'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
