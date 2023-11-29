@@ -64,14 +64,14 @@ export class SharedService {
     
                 // Define a function to get the previous block asynchronously
                 const getPreviousBlock = async () => {
-                    while (this.previousBlock >= 0) {
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                        this.logger.log("Getting previous block at " + this.previousBlock);
-                        const result = await this.getBlock(this.previousBlock.toString());
-                        if (result) {
-                            this.previousBlock--;
-                        }
-                    }
+                    // while (this.previousBlock >= 0) {
+                    //     await new Promise(resolve => setTimeout(resolve, 500));
+                    //     this.logger.log("Getting previous block at " + this.previousBlock);
+                    //     const result = await this.getBlock(this.previousBlock.toString());
+                    //     if (result) {
+                    //         this.previousBlock--;
+                    //     }
+                    // }
                 };
     
                 // Define a function to get the next block asynchronously
