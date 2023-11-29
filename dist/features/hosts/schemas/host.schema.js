@@ -121,4 +121,5 @@ Host = __decorate([
 exports.Host = Host;
 exports.HostSchema = mongoose_1.SchemaFactory.createForClass(Host);
 exports.HostSchema.plugin(paginate);
+exports.HostSchema.index({ timestamp: -1 });
 //# sourceMappingURL=host.schema.js.map

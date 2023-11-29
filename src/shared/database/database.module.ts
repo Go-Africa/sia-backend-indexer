@@ -5,9 +5,6 @@ import { Block, BlockSchema } from 'src/features/blocks/schemas/block.shema';
 import { MinerPayout, MinerPayoutSchema } from 'src/features/blocks/schemas/miner-payout.schema';
 import { LatestData, LatestDataSchema } from 'src/features/dashboard/schemas/latest-data.schema';
 import { Host, HostSchema } from 'src/features/hosts/schemas/host.schema';
-import { CoveredField, CoveredFieldSchema } from 'src/features/transactions/schemas/coveredfields.schema';
-import { SiacoinOutput, SiacoinOutputSchema } from 'src/features/transactions/schemas/siacoinoutput.shema';
-import { TransactionSignature, TransactionSignatureSchema } from 'src/features/transactions/schemas/transaction-signature.schema';
 import { Transaction, TransactionSchema } from 'src/features/transactions/schemas/transaction.shema';
 
 @Module({

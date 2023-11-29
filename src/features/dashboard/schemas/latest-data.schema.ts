@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 
-@Schema({ versionKey: false })
+@Schema({ versionKey: false, timestamps: true })
 export class LatestData extends AbstractDocument {
     @Prop()
     total_transaction: number;
@@ -62,3 +62,4 @@ export class LatestData extends AbstractDocument {
 }
 
 export const LatestDataSchema = SchemaFactory.createForClass(LatestData);
+LatestDataSchema.index({ createdAt: -1 });

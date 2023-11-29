@@ -59,7 +59,7 @@ export class SharedService {
             if (this.response.height) {
                 // Set initial block height values
                 this.currentBlockHeigh = this.response.height;
-                this.previousBlock = 117190;
+                this.previousBlock = this.response.height;
                 console.log(this.response.height);
     
                 // Define a function to get the previous block asynchronously

@@ -100,3 +100,4 @@ export class Host extends AbstractDocument {
   
 export const HostSchema = SchemaFactory.createForClass(Host);
 HostSchema.plugin(paginate);
+HostSchema.index({ timestamp: -1 });

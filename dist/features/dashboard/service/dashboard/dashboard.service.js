@@ -74,6 +74,7 @@ let DashboardService = class DashboardService {
             const sia = response.data["1042"];
             const latestData = new latest_data_dto_1.LatestDataDTO();
             latestData.total_transaction = total_transaction;
+            latestData.total_hosts = hosts.length;
             latestData.remaining_storage = this.remaining_storage;
             latestData.total_storage = this.total_storage;
             latestData.used_storage = this.used_storage;

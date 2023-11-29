@@ -40,16 +40,14 @@ export declare class HostService {
     renterdURL: string;
     base64Credentials: string;
     getHostFromSiad(): Promise<any>;
-    getHosts(page?: number, limit?: number): Promise<{
-        docs: (import("mongoose").Document<unknown, {}, Host> & Host & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }>)[];
-        totalDocs: number;
-        limit: number;
+    getHosts(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         page: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-    }>;
+        limit: number;
+        sort: {
+            timestamp: number;
+        };
+    }, Host> & Host & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }>>>;
     getOneHost(publicKey: string): Promise<Host>;
 }

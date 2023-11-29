@@ -29,16 +29,14 @@ import { Host } from '../../schemas/host.schema';
 export declare class HostController {
     private _dashService;
     constructor(_dashService: HostService);
-    getAllHost(): Promise<{
-        docs: (import("mongoose").Document<unknown, {}, Host> & Host & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }>)[];
-        totalDocs: number;
-        limit: number;
+    getAllHost(): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         page: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-    }>;
+        limit: number;
+        sort: {
+            timestamp: number;
+        };
+    }, Host> & Host & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }>>>;
     getOneHost(publicKey: string): Promise<Host>;
 }

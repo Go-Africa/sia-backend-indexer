@@ -48,12 +48,16 @@ class AbstractRepository {
             return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
         return this.model.find(filterQuery, {}, { lean: true });
     }
+    async paginate(filterQuery, page = 1, limit = 10) {
+        return (await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 } }));
+    }
     async findPaginate(filterQuery, page = 1, limit = 10) {
         const skip = (page - 1) * limit;
         try {
             const result = await this.model.find(filterQuery, {})
                 .limit(limit)
-                .skip(skip);
+                .skip(skip)
+                .sort({ timestamp: -1 });
             const totalPages = Math.ceil(100000 / limit);
             const paginatedResult = {
                 docs: result,

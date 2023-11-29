@@ -57,4 +57,5 @@ Transaction = __decorate([
 exports.Transaction = Transaction;
 exports.TransactionSchema = mongoose_1.SchemaFactory.createForClass(Transaction);
 exports.TransactionSchema.plugin(paginate);
+exports.TransactionSchema.index({ timestamp: -1 });
 //# sourceMappingURL=transaction.shema.js.map

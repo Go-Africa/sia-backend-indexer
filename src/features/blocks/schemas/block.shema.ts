@@ -48,3 +48,4 @@ export class Block extends AbstractDocument {
   
 export const BlockSchema = SchemaFactory.createForClass(Block);
 BlockSchema.plugin(paginate);
+BlockSchema.index({ timestamp: -1 });

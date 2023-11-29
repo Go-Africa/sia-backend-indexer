@@ -65,4 +65,5 @@ Block = __decorate([
 exports.Block = Block;
 exports.BlockSchema = mongoose_1.SchemaFactory.createForClass(Block);
 exports.BlockSchema.plugin(paginate);
+exports.BlockSchema.index({ timestamp: -1 });
 //# sourceMappingURL=block.shema.js.map

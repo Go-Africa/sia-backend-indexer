@@ -83,9 +83,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return this.model.find(filterQuery, {}, { lean: true });
   }
 
-  // async findPaginate(filterQuery: FilterQuery<TDocument>, page: number = 1, limit: number = 10, max: number = 25000) {
-  //   return (await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 }}));
-  // }
+  async paginate(filterQuery: FilterQuery<TDocument>, page: number = 1, limit: number = 10) {
+    return (await this.model.paginate(filterQuery, { page: page, limit: limit, sort: { timestamp: -1 }}));
+  }
+
   async findPaginate(filterQuery: FilterQuery<TDocument>, page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
@@ -93,7 +94,8 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     try {
       const result = await this.model.find(filterQuery, {}, )
         .limit(limit)
-        .skip(skip);
+        .skip(skip)
+        .sort({ timestamp: -1 });
       // Calculez le nombre total de pages en fonction du nombre total de documents
       const totalPages = Math.ceil(100000 / limit);
       // Paginer manuellement en fonction de la page demandée

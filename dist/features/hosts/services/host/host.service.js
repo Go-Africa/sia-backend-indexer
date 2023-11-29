@@ -61,7 +61,7 @@ let HostService = HostService_1 = class HostService {
         }
         try {
             const blocks = await this.hostRepository
-                .findPaginate({}, page, limit);
+                .paginate({}, page, limit);
             return blocks;
         }
         catch (error) {

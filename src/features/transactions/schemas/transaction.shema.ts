@@ -63,3 +63,4 @@ export class Transaction extends AbstractDocument {
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);
 TransactionSchema.plugin(paginate);
+TransactionSchema.index({ timestamp: -1 });

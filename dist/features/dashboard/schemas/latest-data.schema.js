@@ -91,8 +91,9 @@ __decorate([
     __metadata("design:type", Number)
 ], LatestData.prototype, "fully_diluted_market_cap", void 0);
 LatestData = __decorate([
-    (0, mongoose_1.Schema)({ versionKey: false })
+    (0, mongoose_1.Schema)({ versionKey: false, timestamps: true })
 ], LatestData);
 exports.LatestData = LatestData;
 exports.LatestDataSchema = mongoose_1.SchemaFactory.createForClass(LatestData);
+exports.LatestDataSchema.index({ createdAt: -1 });
 //# sourceMappingURL=latest-data.schema.js.map

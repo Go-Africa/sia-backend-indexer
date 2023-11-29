@@ -63,7 +63,7 @@ export class HostService {
         try {
             // Exécutez la requête avec pagination et tri
             const blocks = await this.hostRepository
-                .findPaginate({}, page, limit)
+                .paginate({}, page, limit)
             // log("result", blocks)
             return blocks;
         } catch (error) {

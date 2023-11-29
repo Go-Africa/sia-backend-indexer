@@ -52,7 +52,7 @@ let SharedService = SharedService_1 = class SharedService {
             } while (!this.response);
             if (this.response.height) {
                 this.currentBlockHeigh = this.response.height;
-                this.previousBlock = 117190;
+                this.previousBlock = this.response.height;
                 console.log(this.response.height);
                 const getPreviousBlock = async () => {
                     while (this.previousBlock >= 0) {
