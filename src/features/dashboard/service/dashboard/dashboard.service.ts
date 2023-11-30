@@ -19,7 +19,7 @@ export class DashboardService {
         private readonly transactionRepository: TransactionsRepository,
         private readonly latestRepository: LatestDataRepository,
     ) { 
-        // this.getCMCData();
+        this.getCMCData();
     }
 
     private readonly logger = new Logger(SharedService.name);

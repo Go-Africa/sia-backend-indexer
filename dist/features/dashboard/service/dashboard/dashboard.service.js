@@ -37,6 +37,7 @@ let DashboardService = class DashboardService {
         this.total_storage = 0;
         this.remaining_storage = 0;
         this.used_storage = 0;
+        this.getCMCData();
     }
     async getLatestData() {
         try {

@@ -29,7 +29,7 @@ import { Host } from '../../schemas/host.schema';
 export declare class HostController {
     private _dashService;
     constructor(_dashService: HostService);
-    getAllHost(): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
+    getAllHost(page?: number, limit?: number): Promise<import("mongoose").PaginateResult<import("mongoose").Document<unknown, {
         page: number;
         limit: number;
         sort: {

@@ -45,7 +45,7 @@ class AbstractRepository {
     }
     async find(filterQuery, limit) {
         if (limit)
-            return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
+            return this.model.find(filterQuery, {}, { lean: true }).limit(limit).sort({ createdAt: -1 });
         return this.model.find(filterQuery, {}, { lean: true });
     }
     async paginate(filterQuery, page = 1, limit = 10) {

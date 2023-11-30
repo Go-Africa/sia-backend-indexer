@@ -21,8 +21,8 @@ let HostController = class HostController {
     constructor(_dashService) {
         this._dashService = _dashService;
     }
-    async getAllHost() {
-        const response = await this._dashService.getHosts();
+    async getAllHost(page, limit) {
+        const response = await this._dashService.getHosts(page, limit);
         return response;
     }
     async getOneHost(publicKey) {
@@ -33,9 +33,13 @@ let HostController = class HostController {
 __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully get all host' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request', type: [host_schema_1.Host] }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false }),
     (0, common_1.Get)('/get-all-host'),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], HostController.prototype, "getAllHost", null);
 __decorate([

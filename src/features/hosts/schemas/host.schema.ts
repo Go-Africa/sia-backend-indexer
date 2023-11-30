@@ -1,22 +1,28 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import { AbstractDocument } from "src/shared/database/abstract.schema";
 import * as paginate from "mongoose-paginate-v2";
+import { ApiProperty } from "@nestjs/swagger";
 
 
 @Schema({ versionKey: false })
 export class Host extends AbstractDocument {
+    @ApiProperty()
     @Prop()
     knownSince: string;
   
+    @ApiProperty()
     @Prop({unique: true})
     publicKey: string;
   
+    @ApiProperty()
     @Prop()
     lastAnnouncement: string;
   
+    @ApiProperty()
     @Prop()
     netAddress: string;
   
+    @ApiProperty()
     @Prop(raw({
         uid: { type: String },
         validity: { type: Number },
@@ -55,6 +61,7 @@ export class Host extends AbstractDocument {
     }))
     priceTable: Record<string, any>;
   
+    @ApiProperty()
     @Prop(raw({
         acceptingcontracts: { type: Boolean },
         baserpcprice: { type: String },
@@ -92,9 +99,11 @@ export class Host extends AbstractDocument {
         SuccessfulInteractions: { type: Number },
         FailedInteractions: { type: Number },
     }))
+    @ApiProperty()
     interactions: Record<string, any>;
   
     @Prop()
+    @ApiProperty()
     scanned: boolean;
   }
   

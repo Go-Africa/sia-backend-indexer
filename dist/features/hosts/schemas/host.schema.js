@@ -13,25 +13,31 @@ exports.HostSchema = exports.Host = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const abstract_schema_1 = require("../../../shared/database/abstract.schema");
 const paginate = require("mongoose-paginate-v2");
+const swagger_1 = require("@nestjs/swagger");
 let Host = class Host extends abstract_schema_1.AbstractDocument {
 };
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Host.prototype, "knownSince", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)({ unique: true }),
     __metadata("design:type", String)
 ], Host.prototype, "publicKey", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Host.prototype, "lastAnnouncement", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Host.prototype, "netAddress", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)((0, mongoose_1.raw)({
         uid: { type: String },
         validity: { type: Number },
@@ -71,6 +77,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Host.prototype, "priceTable", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, mongoose_1.Prop)((0, mongoose_1.raw)({
         acceptingcontracts: { type: Boolean },
         baserpcprice: { type: String },
@@ -109,10 +116,12 @@ __decorate([
         SuccessfulInteractions: { type: Number },
         FailedInteractions: { type: Number },
     })),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Object)
 ], Host.prototype, "interactions", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Boolean)
 ], Host.prototype, "scanned", void 0);
 Host = __decorate([

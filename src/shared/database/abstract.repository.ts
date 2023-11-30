@@ -79,7 +79,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
   async find(filterQuery: FilterQuery<TDocument>, limit?: number) {
     if(limit)
-      return this.model.find(filterQuery, {}, { lean: true }).limit(limit);
+      return this.model.find(filterQuery, {}, { lean: true }).limit(limit).sort({ createdAt: -1 });
     return this.model.find(filterQuery, {}, { lean: true });
   }
 
