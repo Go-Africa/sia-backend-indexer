@@ -29,7 +29,7 @@ jobs:
       - uses: easingthemes/ssh-deploy@v2.1.5
         with:
             SOURCE: "./"
-            TARGET: /home/ubuntu/repos/sia-backend-explorer
-            REMOTE_HOST: 35.174.182.36
+            TARGET: /home/ubuntu/repos
+            REMOTE_HOST: 172.208.125.120
             REMOTE_USER: ubuntu
-            SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
+            SSH_PRIVATE_KEY: "${{ secrets.AZURE_KEY }}"
