@@ -14,7 +14,7 @@ export class HostService {
         private httpService: HttpService,
         private readonly hostRepository: HostRepository,
     ) { 
-        // this.getHostFromSiad();
+        this.getHostFromSiad();
     }
 
     private readonly logger = new Logger(HostService.name);

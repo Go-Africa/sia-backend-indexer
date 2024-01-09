@@ -28,6 +28,7 @@ let HostService = HostService_1 = class HostService {
         this.password = process.env.RENTERD_PASSWORD;
         this.renterdURL = process.env.RENTERD_URL;
         this.base64Credentials = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+        this.getHostFromSiad();
     }
     async getHostFromSiad() {
         const url = `${this.renterdURL}/api/bus/hosts`;
