@@ -5,6 +5,7 @@ export declare class Transaction extends AbstractDocument {
     id: string;
     siacoinoutputs: any;
     height: number;
+    createdAt: Date;
     timestamp: number;
     minerfees: string[];
     arbitrarydata: string[];

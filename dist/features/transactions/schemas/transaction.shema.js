@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "height", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: Date.now }),
+    __metadata("design:type", Date)
+], Transaction.prototype, "createdAt", void 0);
+__decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Number)
 ], Transaction.prototype, "timestamp", void 0);
@@ -58,4 +62,5 @@ exports.Transaction = Transaction;
 exports.TransactionSchema = mongoose_1.SchemaFactory.createForClass(Transaction);
 exports.TransactionSchema.plugin(paginate);
 exports.TransactionSchema.index({ timestamp: -1 });
+exports.TransactionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 604800 });
 //# sourceMappingURL=transaction.shema.js.map

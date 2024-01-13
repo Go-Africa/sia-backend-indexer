@@ -58,6 +58,10 @@ __decorate([
         })]),
     __metadata("design:type", miner_payout_schema_1.MinerPayout)
 ], Block.prototype, "minerpayouts", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: Date.now }),
+    __metadata("design:type", Date)
+], Block.prototype, "createdAt", void 0);
 Block = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false }),
     __metadata("design:paramtypes", [block_get_dto_1.BlockGetDTO])
@@ -65,5 +69,6 @@ Block = __decorate([
 exports.Block = Block;
 exports.BlockSchema = mongoose_1.SchemaFactory.createForClass(Block);
 exports.BlockSchema.plugin(paginate);
-exports.BlockSchema.index({ timestamp: -1 });
+exports.BlockSchema.index({ createdAt: -1 });
+exports.BlockSchema.index({ createdAt: 1 }, { expireAfterSeconds: 604800 });
 //# sourceMappingURL=block.shema.js.map

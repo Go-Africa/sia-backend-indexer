@@ -36,6 +36,7 @@ export declare class Block extends AbstractDocument {
     timestamp: number;
     transactionId: string[];
     minerpayouts: MinerPayout;
+    createdAt: Date;
     constructor(dto?: BlockGetDTO);
 }
 export declare const BlockSchema: import("mongoose").Schema<Block, import("mongoose").Model<Block, any, any, any, import("mongoose").Document<unknown, any, Block> & Block & Required<{

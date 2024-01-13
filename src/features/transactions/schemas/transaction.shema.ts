@@ -24,6 +24,9 @@ export class Transaction extends AbstractDocument {
     @Prop()
     height: number;
 
+    @Prop({ default: Date.now }) // Champ createdAt avec une valeur par défaut de la date actuelle
+    createdAt: Date;
+
     @Prop()
     timestamp: number;
 
@@ -64,3 +67,4 @@ export class Transaction extends AbstractDocument {
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);
 TransactionSchema.plugin(paginate);
 TransactionSchema.index({ timestamp: -1 });
+TransactionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 604800 });
